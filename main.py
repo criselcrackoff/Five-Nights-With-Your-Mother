@@ -5,6 +5,7 @@ from data.sounds import *
 from data.game_images import IMAGES
 from engine.images import Images
 from engine.text import Text
+from save.save import *
 import pygame
 from engine.richpresense import RichPresense
 from engine.animatronic import Animatronic
@@ -14,8 +15,11 @@ mixer_sound=MixerMusic()
 mixer_sound.connect()
 #Discord Rich Presense
 discord = RichPresense()
-#
+#save json
 
+create_save()
+
+SAVE = load_save()
 
 #setup
 BASE_WIDTH, BASE_HEIGHT = 1280, 720
@@ -55,7 +59,7 @@ CHANNEL_SFX = {3,4,5,6,7,8,9,10,11,12,13,14,15}
 CHANNEL_VOICE = {}
 
 
-FONT_PATH = "./fonts/OCRAEXT.TTF"
+FONT_PATH = "./assets/fonts//OCRAEXT.TTF"
 FONT_SIZE = [50,40,35,30,25,20,15]
 
 """""""""""
@@ -258,7 +262,7 @@ def create_images(group, width, height, scale):
         )
 
     return images
-
+    
 
 def main():
     discord.initiate_rpc()
@@ -299,7 +303,7 @@ def main():
 # Animatronicos
 
 
-    maurello=Animatronic(1,"Maurello",5)
+    maurello=Animatronic(1,"Maurello",get_fromSave("animatronics.Maurello"))
 
 
 #   TEXTOS
@@ -382,6 +386,7 @@ def main():
 
 
     while run:
+        set_fromSave("animatronics.Maurello", maurello)
         mouse_clicked = False
         delta_time = clock.tick(60) / 1000
         elapsed_time = time.time() - start_time
@@ -449,7 +454,6 @@ def main():
 
 
         keys = pygame.key.get_pressed()
-
 
         if SUBGAMESTATE == "CustomNight":
             CUSTOM_NIGHT_SCROLL = max(
