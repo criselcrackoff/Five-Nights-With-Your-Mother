@@ -1,14 +1,14 @@
 import pygame
 import time
 import random
-from elements.sounds import *
-from elements.game_images import IMAGES
-from images import Images
-from text import Text
+from data.sounds import *
+from data.game_images import IMAGES
+from engine.images import Images
+from engine.text import Text
 import pygame
-from richpresense import RichPresense
-from animatronic import Animatronic
-from mixer import MixerMusic
+from engine.richpresense import RichPresense
+from engine.animatronic import Animatronic
+from engine.mixer import MixerMusic
 pygame.font.init()
 mixer_sound=MixerMusic()
 mixer_sound.connect()
