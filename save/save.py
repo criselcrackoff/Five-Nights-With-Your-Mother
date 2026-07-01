@@ -30,7 +30,8 @@ DEFAULT_SAVE = {
     },
 
     "animatronics": {
-        "Maurello": 5
+        "Maurello": 5,
+        "Furry": 5
     }
 }
 
