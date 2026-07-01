@@ -33,7 +33,7 @@ SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 LEFT_BORDER = WIDTH * 0.45
 RIGHT_BORDER = WIDTH * 0.55
 
-logo = pygame.image.load("./sprites/Icon.png")
+logo = pygame.image.load("./assets/sprites/Icon.png")
 pygame.display.set_icon(logo)
 pygame.display.set_caption(f"Five Nights With Your Mother {VERSION}")
 

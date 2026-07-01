@@ -1,2 +1,2 @@
-Custom_Menu = "./bgm/CustomNightTheme.mp3"
-OfficeAmbience = ["./bgm/NewAmbience.mp3","./bgm/TheForbiddenNocturne.wav","./bgm/watchyoursix.mp3","./bgm/DragMetotheCrusher.wav"]
+Custom_Menu = "./assets/bgm/CustomNightTheme.mp3"
+OfficeAmbience = ["./assets/bgm/NewAmbience.mp3","./assets/bgm/TheForbiddenNocturne.wav","./assets/bgm/watchyoursix.mp3","./assets/bgm/DragMetotheCrusher.wav"]
