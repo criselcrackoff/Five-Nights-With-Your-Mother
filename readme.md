@@ -1,8 +1,20 @@
+# Requierements
+
+To run this proyect you need:
+
+-pygame
+-pypresense
+
+you can install them by using in powershell or VS Code terminal and pasting:
+**python -m pip install pygame**
+**python -m pip install pypresense**
+
 # Five Nights With Your Mother (FNWYM)
 
 **Five Nights With Your Mother (FNWYM)** is a Python UCN fangame based where you fend off plushies? drawings? ...anyway! FNWYM is based off **Ultimate Custom Night (UCN)** and the **Five Nights at Freddy's Series.**
 
 Instead of surviving against haunted animatronics, you'll be defending yourself from an absurd cast of plushies, drawings, and other bizarre characters, each with their own unique mechanics. Every enemy behaves differently, forcing you to learn their patterns and adapt your strategy.
+
 
 ## Gameplay
 
