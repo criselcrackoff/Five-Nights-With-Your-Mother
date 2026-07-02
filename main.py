@@ -6,12 +6,12 @@ from data.game_images import IMAGES
 from engine.images import Images
 from engine.text import Text
 from save.save import *
-import pygame
 from engine.richpresense import RichPresense
 from engine.animatronic import Animatronic
 from engine.mixer import MixerMusic
 from states.warning_screen import warning_main
 from states.custom_night import custom_night_main
+from states.load_night import load_night_main
 pygame.font.init()
 mixer_sound=MixerMusic()
 mixer_sound.connect()
@@ -32,7 +32,7 @@ UI_SCALE = HEIGHT / BASE_HEIGHT
 print(F"Image Scale. {UI_SCALE} (16:9)")
 
 
-VERSION = "1.0.1.4"
+VERSION = "1.0.1.5"
 
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -285,7 +285,6 @@ def main():
     fadein_speed = 712.5
     fadeout_speed = 166.30
     timer=0
-    start_timer=0
     menu_start_time = time.time()
     menu_elapsed_time = 0
     LOAD_NIGHT_TIMER = 0
@@ -388,7 +387,6 @@ def main():
 
 
     while run:
-        set_fromSave("animatronics.Maurello", maurello)
         mouse_clicked = False
         delta_time = clock.tick(60) / 1000
         elapsed_time = time.time() - start_time
@@ -454,35 +452,22 @@ def main():
                                 case "MaurelloAddAi":
                                     maurello.add_ai(1)
 
-
-        keys = pygame.key.get_pressed()
-
-        if SUBGAMESTATE == "CustomNight":
-            CUSTOM_NIGHT_SCROLL = max(
-                -500,
-                min(
-                    CUSTOM_NIGHT_SCROLL,
-                    0
-                )
-            )
         if GAMESTATE == "menu":
-            if SUBGAMESTATE == "warningscreen":
-                if SUBGAMESTATE == "warningscreen":
-
-                    (SUBGAMESTATE, MENUSTATE, timer, menu_start_time) = warning_main(
-                        texts=texts,
-                        img=img,
-                        delta_time=delta_time,
-                        fadein_speed=fadein_speed,
-                        fadeout_speed=fadeout_speed,
-                        timer=timer,
-                        menu_state=MENUSTATE,
-                        mouse_clicked=mouse_clicked,
-                        menu_start_time=menu_start_time,
-                        mixer_sound=mixer_sound,
-                        discord=discord,
-                        channel_menu=CHANNEL_MENU
-                    )
+            if SUBGAMESTATE == "warningscreen":     
+                (SUBGAMESTATE, MENUSTATE, timer, menu_start_time) = warning_main(
+                    texts=texts,
+                    img=img,
+                    delta_time=delta_time,
+                    fadein_speed=fadein_speed,
+                    fadeout_speed=fadeout_speed,
+                    timer=timer,
+                    menu_state=MENUSTATE,
+                    mouse_clicked=mouse_clicked,
+                    menu_start_time=menu_start_time,
+                    mixer_sound=mixer_sound,
+                    discord=discord,
+                    channel_menu=CHANNEL_MENU
+                )
 
                     
             if SUBGAMESTATE == "CustomNight":
@@ -498,68 +483,34 @@ def main():
                     settings_state=SETTINGS_STATE
                 )
             if SUBGAMESTATE == "LoadNight":
-                LOAD_NIGHT_TIMER += delta_time
-                if hour == -4:
-                    texts[1].set_text("8")
-                    texts[1].set_x(590)
-                    texts[2].set_text("PM")
-                elif hour == -2:
-                    texts[1].set_text("10")
-                    texts[2].set_text("PM")
-                    
-                if LOAD_NIGHT_TIMER < 0.12:
-                    img[0].set_alpha(255)
-                    img[1].set_alpha(0)
-                    img[2].set_alpha(0)
-                    texts[0].set_alpha(texts[0].get_alpha()+15)
-                    texts[1].set_alpha(texts[0].get_alpha()+15)
-                    texts[2].set_alpha(texts[0].get_alpha()+15)
-                    texts[3].set_alpha(0)
 
-                elif LOAD_NIGHT_TIMER < 0.24:
-                    img[0].set_alpha(0)
-                    img[1].set_alpha(255)
-                    img[2].set_alpha(0)
-                    texts[0].set_alpha(texts[0].get_alpha()+15)
-                    texts[1].set_alpha(texts[0].get_alpha()+15)
-                    texts[2].set_alpha(texts[0].get_alpha()+15)
-                    texts[3].set_alpha(0)
+                (
+                    GAMESTATE,
+                    SUBGAMESTATE,
+                    LOAD_NIGHT_TIMER,
+                    MUSIC_STOPPED
+                ) = load_night_main(
 
-                elif LOAD_NIGHT_TIMER < 0.36:
-                    img[0].set_alpha(0)
-                    img[1].set_alpha(0)
-                    img[2].set_alpha(255)
-                    texts[0].set_alpha(texts[0].get_alpha()+15)
-                    texts[1].set_alpha(texts[0].get_alpha()+15)
-                    texts[2].set_alpha(texts[0].get_alpha()+15)
-                    texts[3].set_alpha(0)
-                    texts[3].set_y(640)
+                    texts=texts,
+                    img=img,
+                    delta_time=delta_time,
+                    load_night_timer=LOAD_NIGHT_TIMER,
+                    music_stopped=MUSIC_STOPPED,
+                    hour=hour,
+                    mixer_sound=mixer_sound,
+                    channel_menu=CHANNEL_MENU,
+                    channel_ambient=CHANNEL_AMBIENT,
+                    office_ambience=OfficeAmbience
+                )
 
-                elif LOAD_NIGHT_TIMER > 0.36 and LOAD_NIGHT_TIMER < 3.50 and texts[0].get_alpha() <= 255:
-                    img[2].set_alpha(0)
-                    texts[0].set_alpha(texts[0].get_alpha()+15)
-                    texts[1].set_alpha(texts[0].get_alpha()+15)
-                    texts[2].set_alpha(texts[0].get_alpha()+15)
-                elif LOAD_NIGHT_TIMER > 3.50 and LOAD_NIGHT_TIMER < 10.00:
-                    if LOAD_NIGHT_TIMER >= 9.50 and not MUSIC_STOPPED:
-                        mixer_sound.crossfade(CHANNEL_MENU,CHANNEL_AMBIENT,OfficeAmbience[random.randrange(4)],volume=0.08,looping=True,fade_ms=2500)
-                        MUSIC_STOPPED = True
-                    img[3].set_alpha(255)
-                    texts[0].set_alpha(0)
-                    texts[1].set_alpha(0)
-                    texts[2].set_alpha(0)
-                    texts[3].set_alpha(255)
-                else:
-                    MUSIC_STOPPED = False
-                    texts = INGAME_TEXTS
-                    img = INGAME_IMG
-                    GAMESTATE = "ingame"    
             drawMenu(elapsed_time, menu_elapsed_time,texts, img, CUSTOM_NIGHT_SCROLL, SETTINGS_SCROLL)
+
+
         elif GAMESTATE == "ingame":    
-            try:
-                discord.update_rpc(state=f"No Challenge ({texts[0].get_text()} {texts[1].get_text()})", details="In a Night")
-            except:
-                pass
+            texts = INGAME_TEXTS
+            img = INGAME_IMG
+            discord.update_rpc(state=f"No Challenge ({texts[0].get_text()} {texts[1].get_text()})", details="In a Night")
+
             night_timer += delta_time
             if night_timer >= 0.0 and night_timer <= 1.0:
                 for text in texts:
