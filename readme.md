@@ -6,7 +6,9 @@ To run this proyect you need:
 -pypresense
 
 you can install them by using in powershell or VS Code terminal and pasting:
+
 **python -m pip install pygame**
+
 **python -m pip install pypresense**    
 
 # Five Nights With Your Mother (FNWYM)
