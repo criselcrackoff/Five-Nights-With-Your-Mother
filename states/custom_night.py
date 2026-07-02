@@ -5,9 +5,8 @@ def custom_night_main(
     custom_night_scroll,
     settings_scroll,
     settings_speed,
-    settings_state
+    settings_state,
 ):
-
     custom_night_scroll = max(
         -500,
         min(custom_night_scroll, 0)
