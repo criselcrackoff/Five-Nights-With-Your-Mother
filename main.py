@@ -1,21 +1,27 @@
 import pygame
 import time
 import random
-from elements.sounds import *
-from elements.game_images import IMAGES
-from images import Images
-from text import Text
+from data.sounds import *
+from data.game_images import IMAGES
+from engine.images import Images
+from engine.text import Text
+from save.save import *
 import pygame
-from richpresense import RichPresense
-from animatronic import Animatronic
-from mixer import MixerMusic
+from engine.richpresense import RichPresense
+from engine.animatronic import Animatronic
+from engine.mixer import MixerMusic
+from states.warning_screen import warning_main
+from states.custom_night import custom_night_main
 pygame.font.init()
 mixer_sound=MixerMusic()
 mixer_sound.connect()
 #Discord Rich Presense
 discord = RichPresense()
-#
+#save json
 
+create_save()
+
+SAVE = load_save()
 
 #setup
 BASE_WIDTH, BASE_HEIGHT = 1280, 720
@@ -26,14 +32,14 @@ UI_SCALE = HEIGHT / BASE_HEIGHT
 print(F"Image Scale. {UI_SCALE} (16:9)")
 
 
-VERSION = "1.0.1.2"
+VERSION = "1.0.1.4"
 
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 LEFT_BORDER = WIDTH * 0.45
 RIGHT_BORDER = WIDTH * 0.55
 
-logo = pygame.image.load("./sprites/Icon.png")
+logo = pygame.image.load("./assets/sprites/Icon.png")
 pygame.display.set_icon(logo)
 pygame.display.set_caption(f"Five Nights With Your Mother {VERSION}")
 
@@ -55,7 +61,7 @@ CHANNEL_SFX = {3,4,5,6,7,8,9,10,11,12,13,14,15}
 CHANNEL_VOICE = {}
 
 
-FONT_PATH = "./fonts/OCRAEXT.TTF"
+FONT_PATH = "./assets/fonts//OCRAEXT.TTF"
 FONT_SIZE = [50,40,35,30,25,20,15]
 
 """""""""""
@@ -258,11 +264,11 @@ def create_images(group, width, height, scale):
         )
 
     return images
-
+    
 
 def main():
     discord.initiate_rpc()
-    
+
     GAMESTATE="menu"
     SUBGAMESTATE="warningscreen"
     MENUSTATE="fade_in"
@@ -299,7 +305,7 @@ def main():
 # Animatronicos
 
 
-    maurello=Animatronic(1,"Maurello",5)
+    maurello=Animatronic(1,"Maurello",get_fromSave("animatronics.Maurello"))
 
 
 #   TEXTOS
@@ -382,6 +388,7 @@ def main():
 
 
     while run:
+        set_fromSave("animatronics.Maurello", maurello)
         mouse_clicked = False
         delta_time = clock.tick(60) / 1000
         elapsed_time = time.time() - start_time
@@ -450,7 +457,6 @@ def main():
 
         keys = pygame.key.get_pressed()
 
-
         if SUBGAMESTATE == "CustomNight":
             CUSTOM_NIGHT_SCROLL = max(
                 -500,
@@ -461,78 +467,36 @@ def main():
             )
         if GAMESTATE == "menu":
             if SUBGAMESTATE == "warningscreen":
-                if MENUSTATE == "fade_in":
-                    for text in texts:
-                        text.set_alpha(
-                            text.get_alpha() +
-                            fadein_speed * delta_time
-                        )
-                    for image in img:
-                        image.set_alpha(
-                            image.get_alpha() +
-                            fadein_speed * delta_time
-                        )
-                    if texts[0].get_alpha() >= 255:
-                        MENUSTATE = "wait"
+                if SUBGAMESTATE == "warningscreen":
 
-                elif MENUSTATE == "wait":
-                    timer += delta_time
-                    if timer >= 4:
-                        MENUSTATE = "fade_out"
+                    (SUBGAMESTATE, MENUSTATE, timer, menu_start_time) = warning_main(
+                        texts=texts,
+                        img=img,
+                        delta_time=delta_time,
+                        fadein_speed=fadein_speed,
+                        fadeout_speed=fadeout_speed,
+                        timer=timer,
+                        menu_state=MENUSTATE,
+                        mouse_clicked=mouse_clicked,
+                        menu_start_time=menu_start_time,
+                        mixer_sound=mixer_sound,
+                        discord=discord,
+                        channel_menu=CHANNEL_MENU
+                    )
 
-                elif MENUSTATE == "fade_out":
-                    for image in img:
-                        image.set_alpha(
-                            image.get_alpha() -
-                            fadeout_speed * delta_time
-                        )
-                    for text in texts:
-                        text.set_alpha(
-                            text.get_alpha() -
-                            fadeout_speed * delta_time,
-                        )
-                        print(text.get_alpha())
-                    if texts[0].get_alpha() <= 0:
-                        pygame.time.wait(500)
-                        SUBGAMESTATE = "CustomNight"
-                        texts = CUSTOM_NIGHT_TEXTS  
-                        img=CUSTOM_NIGHT_IMG
-                        menu_start_time = time.time()
-                        mixer_sound.play(Custom_Menu,0.1,CHANNEL_MENU,True)
-
-                        discord.update_rpc("Custom Night", "In a Menu:")
-                current_time=pygame.time.get_ticks()
-                if mouse_clicked:
-                    print(mouse_clicked)
-                    print("Changing menu")
-                    SUBGAMESTATE = "CustomNight"
-                    mixer_sound.play(Custom_Menu,0.1,CHANNEL_MENU,True)
-
-                    texts = CUSTOM_NIGHT_TEXTS
-                    img=CUSTOM_NIGHT_IMG
-                    menu_start_time = time.time()
-                    discord.update_rpc("Custom Night", "In a Menu:")
                     
             if SUBGAMESTATE == "CustomNight":
-                if SETTINGS_STATE == "opening":
-                    SETTINGS_SCROLL += SETTINGS_SPEED * delta_time
-
-                    if SETTINGS_SCROLL >= 1050:
-                        SETTINGS_SCROLL = 1050
-                        SETTINGS_STATE = "open"
-                        for text in texts:
-                            if text.get_id() == 8:
-                                text.set_trigeable(True)
-
-                elif SETTINGS_STATE == "closing":
-                    SETTINGS_SCROLL -= SETTINGS_SPEED * delta_time
-
-                    if SETTINGS_SCROLL <= 0:
-                        SETTINGS_SCROLL = 0
-                        SETTINGS_STATE = "closed"
-                        for text in texts:
-                            if text.get_id() == 7:
-                                text.set_trigeable(True)
+                texts = CUSTOM_NIGHT_TEXTS
+                img = CUSTOM_NIGHT_IMG
+                menu_start_time = time.time()
+                (CUSTOM_NIGHT_SCROLL,SETTINGS_SCROLL,SETTINGS_STATE) = custom_night_main(
+                    texts=texts,
+                    delta_time=delta_time,
+                    custom_night_scroll=CUSTOM_NIGHT_SCROLL,
+                    settings_scroll=SETTINGS_SCROLL,
+                    settings_speed=SETTINGS_SPEED,
+                    settings_state=SETTINGS_STATE
+                )
             if SUBGAMESTATE == "LoadNight":
                 LOAD_NIGHT_TIMER += delta_time
                 if hour == -4:

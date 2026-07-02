@@ -1,0 +1,26 @@
+{
+    "version": "1.0.1.2",
+    "progress": {
+        "stars": 0,
+        "highscore": 0
+    },
+    "challenges": {
+        "challenge_1": false,
+        "challenge_2": false,
+        "challenge_3": false
+    },
+    "settings": {
+        "fullscreen": false,
+        "width": 1280,
+        "height": 720
+    },
+    "statistics": {
+        "play_time": 0,
+        "total_deaths": 0,
+        "total_wins": 0
+    },
+    "animatronics": {
+        "Maurello": 5,
+        "Furry": 5
+    }
+}
