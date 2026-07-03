@@ -33,7 +33,7 @@ UI_SCALE = HEIGHT / BASE_HEIGHT
 print(F"Image Scale. {UI_SCALE} (16:9)")
 
 
-VERSION = "1.0.1.7"
+VERSION = "1.0.1.9"
 
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -407,51 +407,55 @@ def main():
                         )
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 mouse_clicked = True
+                if GAMESTATE == "menu" and SUBGAMESTATE == "CustomNight":
+                    for text in texts:
+                        if text.is_trigeable():
+                            rect = text.get_rect()
+                            if rect and rect.collidepoint(mouse_x, mouse_y):
+                                match text.get_id():
+                                    case 1:
+                                        maurello.set_ai(0)
+                                    case 2:
+                                        maurello.add_ai(1)
+                                    case 3:
+                                        maurello.set_ai(5)
+                                    case 4:
+                                        maurello.set_ai(10)
+                                    case 5:
+                                        maurello.set_ai(20)
+                                    case 6:
+                                        print("Start game")
+                                        menu_start_time = time.time()
+                                        mixer_sound.set_volume(CHANNEL_MENU, 0.05)
+                                        texts = LOAD_NIGHT_TEXTS
+                                        img = LOAD_NIGHT_IMG
+                                        discord.update_rpc("Loading night","In a Menu")
+                                        SUBGAMESTATE = "LoadNight"
+                                    case 7:
+                                        mixer_sound.set_volume(CHANNEL_MENU, 0.05)
+                                        text.set_trigeable(False)
+                                        SETTINGS_STATE = "opening"
+                                        
+                                    case 8:
+                                        mixer_sound.set_volume(CHANNEL_MENU,0.1)
+                                        text.set_trigeable(False)
+                                        SETTINGS_STATE = "closing"
 
-                for text in texts:
-                    if text.is_trigeable():
-                        rect = text.get_rect()
-                        if rect and rect.collidepoint(mouse_x, mouse_y):
-                            match text.get_id():
-                                case 1:
-                                    maurello.set_ai(0)
-                                case 2:
-                                    maurello.add_ai(1)
-                                case 3:
-                                    maurello.set_ai(5)
-                                case 4:
-                                    maurello.set_ai(10)
-                                case 5:
-                                    maurello.set_ai(20)
-                                case 6:
-                                    print("Start game")
-                                    menu_start_time = time.time()
-                                    mixer_sound.set_volume(CHANNEL_MENU, 0.05)
-                                    texts = LOAD_NIGHT_TEXTS
-                                    img = LOAD_NIGHT_IMG
-                                    discord.update_rpc("Loading night","In a Menu")
-                                    SUBGAMESTATE = "LoadNight"
-                                case 7:
-                                    mixer_sound.set_volume(CHANNEL_MENU, 0.05)
-                                    text.set_trigeable(False)
-                                    SETTINGS_STATE = "opening"
-                                    
-                                case 8:
-                                    mixer_sound.set_volume(CHANNEL_MENU,0.1)
-                                    text.set_trigeable(False)
-                                    SETTINGS_STATE = "closing"
-
-                for image in img:
-                    if image.is_trigeable():
-                        rect = image.get_rect()
-                        if rect and rect.collidepoint(mouse_x, mouse_y):
-                            match image.get_subid():
-                                case "MaurelloMinusAi":
-                                    maurello.minus_ai(1)
-                            match image.get_subid():
-                                case "MaurelloAddAi":
-                                    maurello.add_ai(1)
-
+                    for image in img:
+                        if image.is_trigeable():
+                            rect = image.get_rect()
+                            if rect and rect.collidepoint(mouse_x, mouse_y):
+                                match image.get_subid():
+                                    case "MaurelloMinusAi":
+                                        maurello.minus_ai(1)
+                                match image.get_subid():
+                                    case "MaurelloAddAi":
+                                        maurello.add_ai(1)
+                elif GAMESTATE == "CustomNight":
+                    for text in texts:
+                        pass
+                    for image in img:
+                        pass
         if GAMESTATE == "menu":
             if SUBGAMESTATE == "warningscreen":     
                 (SUBGAMESTATE, MENUSTATE, timer, menu_start_time) = warning_main(

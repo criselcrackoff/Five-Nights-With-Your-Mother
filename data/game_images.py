@@ -1,5 +1,12 @@
 import pygame
 
+DoorButtons = [
+        "./assets/sprites/Mechanics/Buttons/Doors-Button.png",
+        "./assets/sprites/Mechanics/Buttons/Doors-Button-On.png",
+        "./assets/sprites/Mechanics/Buttons/Doors-Buttonoff.png",
+]
+
+
 IMAGES = {
 
     "WARNING": [
@@ -196,7 +203,7 @@ IMAGES = {
 
         {
             "id":"LeftButton",
-            "path":"./assets/sprites/Mechanics/Buttons/Doors-Button.png",
+            "path":DoorButtons[0],
             "alpha":255,
             "x":322,
             "y":390,
@@ -207,7 +214,7 @@ IMAGES = {
 
         {
             "id":"RightButton",
-            "path":"./assets/sprites/Mechanics/Buttons/Doors-Button.png",
+            "path":DoorButtons[0],
             "alpha":255,
             "x":736,
             "y":390,
@@ -250,5 +257,6 @@ IMAGES = {
         }
 
     ]
+
 
 }
