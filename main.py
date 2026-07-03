@@ -12,6 +12,7 @@ from engine.mixer import MixerMusic
 from states.warning_screen import warning_main
 from states.custom_night import custom_night_main
 from states.load_night import load_night_main
+from states.ingame import ingame_main
 pygame.font.init()
 mixer_sound=MixerMusic()
 mixer_sound.connect()
@@ -303,7 +304,6 @@ def main():
 
 # Animatronicos
 
-
     maurello=Animatronic(1,"Maurello",get_fromSave("animatronics.Maurello"))
 
 
@@ -506,57 +506,35 @@ def main():
             drawMenu(elapsed_time, menu_elapsed_time,texts, img, CUSTOM_NIGHT_SCROLL, SETTINGS_SCROLL)
 
 
-        elif GAMESTATE == "ingame":    
+        elif GAMESTATE == "ingame":
+
             texts = INGAME_TEXTS
             img = INGAME_IMG
-            discord.update_rpc(state=f"No Challenge ({texts[0].get_text()} {texts[1].get_text()})", details="In a Night")
 
-            night_timer += delta_time
-            if night_timer >= 0.0 and night_timer <= 1.0:
-                for text in texts:
-                    if hour == -4:
-                        if text.get_subid() == "Period":
-                            text.set_text("PM")
-                        if text.get_subid() == "Hour":
-                            text.set_text("8")
-                            text.set_x(1170)
-                    elif hour == -2:
-                        if text.get_subid() == "Period":
-                            text.set_text("PM")
-                        if text.get_subid() == "Hour":
-                            text.set_text("10")
-                            text.set_x(1150)
-                    elif hour == 0:
-                        if text.get_subid() == "Period":
-                            text.set_text("AM")
-                        if text.get_subid() == "Hour":
-                            text.set_text("12")
-                    elif hour == 1:
-                        if text.get_subid() == "Hour":
-                            text.set_text("1")
-                            text.set_x(1170)
-            if night_timer > 75.0:
-                hour += 1
-                texts[0].set_text(str(int(texts[0].get_text())+1))
-                night_timer = 0
-            if INGAME_FADE_ALPHA > 0:
-                INGAME_FADE_ALPHA -= INGAME_FADE_SPEED * delta_time
+            (player_x,night_timer,hour,INGAME_FADE_ALPHA) = ingame_main(
 
-                if INGAME_FADE_ALPHA < 0:
-                    INGAME_FADE_ALPHA = 0
-                img[3].set_alpha(INGAME_FADE_ALPHA)
-                
-            if mouse_x < LEFT_BORDER:
-                distance = LEFT_BORDER - mouse_x
-                speed = (distance / LEFT_BORDER) * MAX_SPEED
-                player_x -= speed * delta_time
+                texts=texts,
+                img=img,
 
-            elif mouse_x > RIGHT_BORDER:
-                distance = mouse_x - RIGHT_BORDER
-                speed = (distance / (WIDTH - RIGHT_BORDER)) * MAX_SPEED
-                player_x += speed * delta_time
-            player_x = max(0, min(player_x, WIDTH - player.width))
-            player.x = int(player_x)
+                player=player,
+                player_x=player_x,
+                mouse_x=mouse_x,
+
+                delta_time=delta_time,
+
+                night_timer=night_timer,
+                hour=hour,
+
+                fade_alpha=INGAME_FADE_ALPHA,
+                fade_speed=INGAME_FADE_SPEED,
+
+                left_border=LEFT_BORDER,
+                right_border=RIGHT_BORDER,
+                width=WIDTH,
+                max_speed=MAX_SPEED,
+
+                discord=discord
+            )
 
             drawIngame(player, elapsed_time, texts, img)
     pygame.quit()
