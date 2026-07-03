@@ -21,11 +21,20 @@
     },
     "animatronics": {
         "Maurello": {
-                "ai": 5,
-                "ignoremask": true,
-                "jumpscare": [ "./assets/sfx/Furry.mp3" ],
-                "path": []
-            },
-        "Furry": 5
+            "ai": 5,
+            "ignoremask": true,
+            "jumpscare": [
+                "./assets/sfx/Furry.mp3"
+            ],
+            "path": []
+        },
+        "Furry": {
+            "ai": 5,
+            "ignoremask": true,
+            "jumpscare": [
+                "./assets/sfx/Furry.mp3"
+            ],
+            "path": []
+        }
     }
 }

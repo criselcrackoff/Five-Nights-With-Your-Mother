@@ -36,7 +36,12 @@ DEFAULT_SAVE = {
                 "jumpscare": [ "./assets/sfx/Furry.mp3" ],
                 "path": []
             },
-        "Furry": 5
+        "Furry": {
+                "ai": 5,
+                "ignoremask": True,
+                "jumpscare": [ "./assets/sfx/Furry.mp3" ],
+                "path": []
+            }
     }
 }
 

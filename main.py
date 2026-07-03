@@ -33,7 +33,7 @@ UI_SCALE = HEIGHT / BASE_HEIGHT
 print(F"Image Scale. {UI_SCALE} (16:9)")
 
 
-VERSION = "1.0.1.5"
+VERSION = "1.0.1.7"
 
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -304,8 +304,8 @@ def main():
 
 # Animatronicos
 
-    maurello=Animatronic(1,"Maurello",get_fromSave("animatronics.Maurello"))
-
+    maurello=Animatronic(1,"Maurello",get_fromSave("animatronics.Maurello.ai"))
+    furry=Animatronic(1,"Maurello",get_fromSave("animatronics.Maurello.ai"))
 
 #   TEXTOS
 
