@@ -20,7 +20,12 @@
         "total_wins": 0
     },
     "animatronics": {
-        "Maurello": 5,
+        "Maurello": {
+                "ai": 5,
+                "ignoremask": true,
+                "jumpscare": [ "./assets/sfx/Furry.mp3" ],
+                "path": []
+            },
         "Furry": 5
     }
 }

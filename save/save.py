@@ -30,7 +30,12 @@ DEFAULT_SAVE = {
     },
 
     "animatronics": {
-        "Maurello": 5,
+        "Maurello": {
+                "ai": 5,
+                "ignoremask": True,
+                "jumpscare": [ "./assets/sfx/Furry.mp3" ],
+                "path": []
+            },
         "Furry": 5
     }
 }
