@@ -2,8 +2,8 @@
 
 To run this proyect you need:
 
--pygame
--pypresense
+- pygame
+- pypresense
 
 you can install them by using in powershell or VS Code terminal and pasting:
 
