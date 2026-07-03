@@ -148,7 +148,7 @@ IMAGES = {
 
     ],
 
-    "INGAME":[
+    "INGAME_COMPACTOFFICE":[
 
         {
             "id":"office",
@@ -158,6 +158,61 @@ IMAGES = {
             "y":0,
             "trigger":False,
             "fullscreen":True,
+            "subid":None
+        },
+
+        {
+            "id":"LeftDoor",
+            "path":"./assets/sprites/Mechanics/Doors/ClosetDoor720.png",
+            "alpha":0,
+            "x":0,
+            "y":0,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "id":"RightDoor",
+            "path":"./assets/sprites/Mechanics/Doors/Door720p.png",
+            "alpha":0,
+            "x":1055,
+            "y":0,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "id":"LeftButtonbg",
+            "path":"./assets/sprites/Mechanics/Buttons/exclusive-button.png",
+            "alpha":255,
+            "x":306,
+            "y":236,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "id":"LeftButton",
+            "path":"./assets/sprites/Mechanics/Buttons/Doors-Button.png",
+            "alpha":255,
+            "x":322,
+            "y":390,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "id":"RightButton",
+            "path":"./assets/sprites/Mechanics/Buttons/Doors-Button.png",
+            "alpha":255,
+            "x":736,
+            "y":390,
+            "trigger":False,
+            "fullscreen":False,
             "subid":None
         },
 

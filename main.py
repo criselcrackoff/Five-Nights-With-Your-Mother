@@ -379,7 +379,7 @@ def main():
 
     LOAD_NIGHT_IMG = create_images("LOAD_NIGHT", WIDTH, HEIGHT, UI_SCALE)
 
-    INGAME_IMG = create_images("INGAME", WIDTH, HEIGHT, UI_SCALE)
+    INGAME_IMG = create_images("INGAME_COMPACTOFFICE", WIDTH, HEIGHT, UI_SCALE)
 
     img=[]
     img=WARNING_IMG.copy()
@@ -535,7 +535,7 @@ def main():
 
                 discord=discord
             )
-
+            maurello.update(delta_time)
             drawIngame(player, elapsed_time, texts, img)
     pygame.quit()
 # The game will only start only if this python file is executed.

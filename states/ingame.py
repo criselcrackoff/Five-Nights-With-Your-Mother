@@ -77,8 +77,9 @@ def ingame_main(
 
         if fade_alpha < 0:
             fade_alpha = 0
-
-        img[3].set_alpha(fade_alpha)
+        for image in img:
+            if image.get_id() == "fadein":
+                image.set_alpha(fade_alpha)
 
     if mouse_x < left_border:
 
