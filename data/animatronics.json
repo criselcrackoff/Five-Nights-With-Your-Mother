@@ -1,0 +1,8 @@
+{
+    "Maurello": {
+        "ai": 5,
+        "ignoremask": true,
+        "jumpscare": [ "./assets/sfx/Furry.mp3" ],
+        "path": []
+    }
+}
