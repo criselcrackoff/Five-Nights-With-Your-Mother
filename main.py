@@ -212,6 +212,8 @@ def drawIngame(player, elapsed_time, texts, img):
             surface.set_alpha(image.get_alpha())
             x = int(image.get_x() * UI_SCALE)
             y = int(image.get_y() * UI_SCALE)
+            rect = surface.get_rect(topleft=(x, y))
+            image.set_rect(rect)
             SCREEN.blit(surface,(x, y))
     for text in texts:
         x = int(text.get_x() * UI_SCALE)
@@ -301,6 +303,9 @@ def main():
     start_time = time.time()
     elapsed_time = 0
     
+    officetype = "Compact"
+    LEFT_DOOR = "Open"
+    RIGHT_DOOR = "Open"
 
 # Animatronicos
 
@@ -451,11 +456,61 @@ def main():
                                 match image.get_subid():
                                     case "MaurelloAddAi":
                                         maurello.add_ai(1)
-                elif GAMESTATE == "CustomNight":
+                elif GAMESTATE == "ingame":
                     for text in texts:
                         pass
                     for image in img:
-                        pass
+                        if image.is_trigeable():
+                            rect = image.get_rect()
+                            if rect and rect.collidepoint(mouse_x, mouse_y):
+                                match image.get_id():
+                                    case "LeftButton":
+                                        print("Click!")
+                                        match image.get_subid():
+                                            case "off":
+                                                image.set_subid("on")
+                                                image.change_image(
+                                                    "./assets/sprites/Mechanics/Buttons/Doors-Button-On.png"
+                                                )
+                                                LEFT_DOOR = "Closed"
+                                                for image in img:
+                                                    if image.get_id() == "LeftDoor":
+                                                        image.set_subid("closed")
+                                                        image.set_alpha(255)
+                                            case "on":
+                                                image.set_subid("off")
+                                                image.change_image(
+                                                    "./assets/sprites/Mechanics/Buttons/Doors-Button.png"
+                                                )
+                                                LEFT_DOOR = "Open"
+                                                for image in img:
+                                                    if image.get_id() == "LeftDoor":
+                                                        image.set_subid("open")
+                                                        image.set_alpha(0)
+                                    case "RightButton":
+                                        print("Click!")
+                                        match image.get_subid():
+                                            case "off":
+                                                image.set_subid("on")
+                                                image.change_image(
+                                                    "./assets/sprites/Mechanics/Buttons/Doors-Button-On.png"
+                                                )
+                                                RIGHT_DOOR = "Closed"
+                                                for image in img:
+                                                    if image.get_id() == "RightDoor":
+                                                        image.set_subid("closed")
+                                                        image.set_alpha(255)
+                                            case "on":
+                                                image.set_subid("off")
+                                                image.change_image(
+                                                    "./assets/sprites/Mechanics/Buttons/Doors-Button.png"
+                                                )
+                                                RIGHT_DOOR = "Open"
+                                                for image in img:
+                                                    if image.get_id() == "RightDoor":
+                                                        image.set_subid("open")
+                                                        image.set_alpha(0)
+                                        
         if GAMESTATE == "menu":
             if SUBGAMESTATE == "warningscreen":     
                 (SUBGAMESTATE, MENUSTATE, timer, menu_start_time) = warning_main(

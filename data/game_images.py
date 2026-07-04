@@ -1,11 +1,5 @@
 import pygame
 
-DoorButtons = [
-        "./assets/sprites/Mechanics/Buttons/Doors-Button.png",
-        "./assets/sprites/Mechanics/Buttons/Doors-Button-On.png",
-        "./assets/sprites/Mechanics/Buttons/Doors-Buttonoff.png",
-]
-
 
 IMAGES = {
 
@@ -176,7 +170,7 @@ IMAGES = {
             "y":0,
             "trigger":False,
             "fullscreen":False,
-            "subid":None
+            "subid":"open"
         },
 
         {
@@ -187,7 +181,7 @@ IMAGES = {
             "y":0,
             "trigger":True,
             "fullscreen":False,
-            "subid":None
+            "subid":"open"
         },
 
         {
@@ -203,24 +197,24 @@ IMAGES = {
 
         {
             "id":"LeftButton",
-            "path":DoorButtons[0],
+            "path":"./assets/sprites/Mechanics/Buttons/Doors-Button.png",
             "alpha":255,
             "x":322,
             "y":390,
             "trigger":True,
             "fullscreen":False,
-            "subid":None
+            "subid":"off"
         },
 
         {
             "id":"RightButton",
-            "path":DoorButtons[0],
+            "path":"./assets/sprites/Mechanics/Buttons/Doors-Button.png",
             "alpha":255,
             "x":736,
             "y":390,
-            "trigger":False,
+            "trigger":True,
             "fullscreen":False,
-            "subid":None
+            "subid":"off"
         },
 
         {
