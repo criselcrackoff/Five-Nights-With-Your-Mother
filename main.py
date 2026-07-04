@@ -62,12 +62,13 @@ CHANNEL_SFX = {3,4,5,6,7,8,9,10,11,12,13,14,15}
 CHANNEL_VOICE = {}
 
 
-FONT_PATH = "./assets/fonts//OCRAEXT.TTF"
-FONT_SIZE = [50,40,35,30,25,20,15]
 
 """""""""""
 Fonts 
 """""""""""
+FONT_PATH = "./assets/fonts//OCRAEXT.TTF"
+FONT_SIZE = [50,40,35,30,25,20,15]
+
 CLOCK = pygame.font.Font(FONT_PATH, int(FONT_SIZE[0] * UI_SCALE))
 H1 = pygame.font.Font(FONT_PATH, int(FONT_SIZE[1] * UI_SCALE))
 H2 = pygame.font.Font(FONT_PATH, int(FONT_SIZE[2] * UI_SCALE))
@@ -465,7 +466,6 @@ def main():
                             if rect and rect.collidepoint(mouse_x, mouse_y):
                                 match image.get_id():
                                     case "LeftButton":
-                                        print("Click!")
                                         match image.get_subid():
                                             case "off":
                                                 image.set_subid("on")
@@ -488,7 +488,6 @@ def main():
                                                         image.set_subid("open")
                                                         image.set_alpha(0)
                                     case "RightButton":
-                                        print("Click!")
                                         match image.get_subid():
                                             case "off":
                                                 image.set_subid("on")
