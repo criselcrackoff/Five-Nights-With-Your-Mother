@@ -5,6 +5,7 @@ IMAGES = {
 
     "WARNING": [
         {
+            "type":"image",
             "id": "0",
             "path": "./assets/sprites/intro/game_made_by.png",
             "alpha": 0,
@@ -19,6 +20,7 @@ IMAGES = {
     "CUSTOM_NIGHT": [
 
         {
+            "type":"image",
             "id": "0",
             "path": "./assets/sprites/CustomNight/CustomNightBackground.png",
             "alpha": 255,
@@ -30,6 +32,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id": "CN",
             "path": "./assets/sprites/CustomNight/UI/Portraits/CustomIndicator.png",
             "alpha":255,
@@ -41,6 +44,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"CN",
             "path":"./assets/sprites/CustomNight/UI/Portraits/Maurello_Portrait.png",
             "alpha":255,
@@ -53,6 +57,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"CN",
             "path":"./assets/sprites/UI/left1.png",
             "alpha":255,
@@ -64,6 +69,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"CN",
             "path":"./assets/sprites/UI/right1.png",
             "alpha":255,
@@ -77,6 +83,7 @@ IMAGES = {
         # ...el resto exactamente igual...
 
         {
+            "type":"image",
             "id":"GradientMask",
             "path":"./assets/sprites/CustomNight/BG_Fade.png",
             "alpha":255,
@@ -88,6 +95,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"Config",
             "path":"./assets/sprites/CustomNight/UI/settings.png",
             "alpha":255,
@@ -103,6 +111,7 @@ IMAGES = {
     "LOAD_NIGHT":[
 
         {
+            "type":"image",
             "id":"1",
             "path":"./assets/sprites/BlipAnim/01.png",
             "alpha":255,
@@ -114,6 +123,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"2",
             "path":"./assets/sprites/BlipAnim/05.png",
             "alpha":0,
@@ -125,6 +135,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"3",
             "path":"./assets/sprites/BlipAnim/09.png",
             "alpha":0,
@@ -136,6 +147,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"Controls",
             "path":"./assets/sprites/Alternative Controls.png",
             "alpha":0,
@@ -152,6 +164,7 @@ IMAGES = {
     "INGAME_COMPACTOFFICE":[
 
         {
+            "type":"image",
             "id":"office",
             "path":"./assets/sprites/CompactOffice/Office.png",
             "alpha":255,
@@ -162,7 +175,8 @@ IMAGES = {
             "subid":None
         },
 
-        {
+        {   
+            "type":"image",
             "id":"LeftDoor",
             "path":"./assets/sprites/Mechanics/Doors/ClosetDoor720.png",
             "alpha":0,
@@ -174,6 +188,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"RightDoor",
             "path":"./assets/sprites/Mechanics/Doors/Door720p.png",
             "alpha":0,
@@ -184,7 +199,8 @@ IMAGES = {
             "subid":"open"
         },
 
-        {
+        {   
+            "type":"image",
             "id":"LeftButtonbg",
             "path":"./assets/sprites/Mechanics/Buttons/exclusive-button.png",
             "alpha":255,
@@ -195,7 +211,8 @@ IMAGES = {
             "subid":None
         },
 
-        {
+        {   
+            "type":"image",
             "id":"LeftButton",
             "path":"./assets/sprites/Mechanics/Buttons/Doors-Button.png",
             "alpha":255,
@@ -207,6 +224,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"RightButton",
             "path":"./assets/sprites/Mechanics/Buttons/Doors-Button.png",
             "alpha":255,
@@ -218,6 +236,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"CameraBar",
             "path":"./assets/sprites/Mechanics/Buttons/Monitor Button.png",
             "alpha":175,
@@ -229,6 +248,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"MaskBar",
             "path":"./assets/sprites/Mechanics/Buttons/Mask Button.png",
             "alpha":175,
@@ -240,6 +260,7 @@ IMAGES = {
         },
 
         {
+            "type":"image",
             "id":"fadein",
             "path":"./assets/sprites/onepixel.png",
             "alpha":255,

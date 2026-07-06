@@ -151,8 +151,6 @@ def drawMenu(elapsed_time, menu_elapsed_time,texts, img, CUSTOM_NIGHT_SCROLL, SE
             SCREEN.blit(surface, (x, y))
     for image in img:
         if image.get_id() == "Config":
-            if isinstance(image, Animation):
-                image.update(delta_time)
             surface = image.get_scr().copy()
             surface.set_alpha(image.get_alpha())
             x = int((image.get_x() + config_x) * UI_SCALE)
@@ -252,29 +250,69 @@ def create_images(group, width, height, scale):
 
     for data in IMAGES[group]:
 
-        surface = pygame.image.load(data["path"]).convert_alpha()
+        if data.get("type", "image") == "animation":
 
-        if "size" in data:
-            surface = pygame.transform.smoothscale(
-                surface,
-                data["size"]
+            images.append(
+
+                Animation(
+
+                    id=data["id"],
+                    folder=data["folder"],
+
+                    trigger=data["trigger"],
+                    alpha=data["alpha"],
+
+                    x=data["x"],
+                    y=data["y"],
+
+                    width=width,
+                    height=height,
+                    scale=scale,
+
+                    fullscreen=data["fullscreen"],
+                    subid=data["subid"],
+
+                    fps=data.get("fps",12),
+                    loop=data.get("loop",True)
+
+                )
+
             )
 
-        images.append(
-            Images(
-                data["id"],
-                surface,
-                data["trigger"],
-                data["alpha"],
-                data["x"],
-                data["y"],
-                width,
-                height,
-                scale,
-                data["fullscreen"],
-                data["subid"]
+        else:
+
+            surface = pygame.image.load(
+                data["path"]
+            ).convert_alpha()
+
+            if "size" in data:
+
+                surface = pygame.transform.smoothscale(
+                    surface,
+                    data["size"]
+                )
+
+            images.append(
+
+                Images(
+
+                    data["id"],
+                    surface,
+                    data["trigger"],
+                    data["alpha"],
+                    data["x"],
+                    data["y"],
+
+                    width,
+                    height,
+                    scale,
+
+                    data["fullscreen"],
+                    data["subid"]
+
+                )
+
             )
-        )
 
     return images
 
