@@ -6,10 +6,11 @@ from data.game_images import IMAGES
 from engine.images import Images
 from engine.animation import Animation
 from engine.text import Text
-from save.save import *
 from engine.richpresense import RichPresense
 from engine.animatronic import Animatronic
 from engine.mixer import MixerMusic
+from engine.doors.door import Door
+from save.save import *
 from states.warning_screen import warning_main
 from states.custom_night import custom_night_main
 from states.load_night import load_night_main
@@ -286,29 +287,6 @@ def get_image(images, image_id, image_subid=None):
 
     return None
 
-def toggle_door(button, door):
-    if button.get_subid() == "off":
-        button.set_subid("on")
-        button.change_image(
-            "./assets/sprites/Mechanics/Buttons/Doors-Button-On.png"
-        )
-
-        door.set_subid("closed")
-        door.set_alpha(255)
-
-        return "Closed"
-
-    else:
-        button.set_subid("off")
-        button.change_image(
-            "./assets/sprites/Mechanics/Buttons/Doors-Button.png"
-        )
-
-        door.set_subid("open")
-        door.set_alpha(0)
-
-        return "Open"
-
 def main():
     discord.initiate_rpc()
 
@@ -349,8 +327,6 @@ def main():
 #   Indica que tipo de noche (1 = Normal... 4 = XXL)
     night_type = 1
     officetype = "Compact"
-    LEFT_DOOR = "Open"
-    RIGHT_DOOR = "Open"
 
 #   Animatronicos
 
@@ -512,17 +488,7 @@ def main():
                             continue
 
                         if image.get_id().endswith("Button"):
-
-                            side = image.get_id().replace("Button", "")
-                            door = get_image(img, f"{side}Door")
-
-                            state = toggle_door(image, door)
-
-                            if side == "Left":
-                                LEFT_DOOR = state
-                            else:
-                                RIGHT_DOOR = state
-                                        
+                                pass        
         if GAMESTATE == "menu":
             if SUBGAMESTATE == "warningscreen":     
                 (SUBGAMESTATE, MENUSTATE, timer, menu_start_time) = warning_main(
@@ -554,7 +520,6 @@ def main():
                     settings_state=SETTINGS_STATE
                 )
             if SUBGAMESTATE == "LoadNight":
-
                 (
                     GAMESTATE,
                     SUBGAMESTATE,
@@ -578,7 +543,7 @@ def main():
 
 
         elif GAMESTATE == "ingame":
-
+            
             texts = INGAME_TEXTS
             img = INGAME_IMG
 
