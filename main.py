@@ -4,6 +4,7 @@ import random
 from data.sounds import *
 from data.game_images import IMAGES
 from engine.images import Images
+from engine.animation import Animation
 from engine.text import Text
 from save.save import *
 from engine.richpresense import RichPresense
@@ -58,7 +59,7 @@ Sound
 CHANNEL_MENU = 0
 CHANNEL_AMBIENT = 1
 CHANNEL_MUSIC = 2
-CHANNEL_SFX = {3,4,5,6,7,8,9,10,11,12,13,14,15}
+CHANNEL_SFX = list(range(3,16))
 CHANNEL_VOICE = {}
 
 
@@ -77,16 +78,20 @@ H4 = pygame.font.Font(FONT_PATH, int(FONT_SIZE[4] * UI_SCALE))
 H5 = pygame.font.Font(FONT_PATH, int(FONT_SIZE[5] * UI_SCALE))
 P  = pygame.font.Font(FONT_PATH, int(FONT_SIZE[6] * UI_SCALE))
 
-def drawMenu(elapsed_time, menu_elapsed_time,texts, img, CUSTOM_NIGHT_SCROLL, SETTINGS_SCROLL):   
+
+#surface es el dibujado a fondo
+#screen.blit toma el surface y lo dibuja en pantalla
+def drawMenu(elapsed_time, menu_elapsed_time,texts, img, CUSTOM_NIGHT_SCROLL, SETTINGS_SCROLL, delta_time):   
     SCREEN.fill("black")
     layered=None
     scroll_y = CUSTOM_NIGHT_SCROLL
     config_x = SETTINGS_SCROLL
     for image in img:
 
+        if isinstance(image, Animation):
+            image.update(delta_time)
         surface = image.get_scr().copy()
         surface.set_alpha(image.get_alpha())
-
         x = int(image.get_x() * UI_SCALE)
         match image.get_id():
             case "CN":
@@ -146,6 +151,8 @@ def drawMenu(elapsed_time, menu_elapsed_time,texts, img, CUSTOM_NIGHT_SCROLL, SE
             SCREEN.blit(surface, (x, y))
     for image in img:
         if image.get_id() == "Config":
+            if isinstance(image, Animation):
+                image.update(delta_time)
             surface = image.get_scr().copy()
             surface.set_alpha(image.get_alpha())
             x = int((image.get_x() + config_x) * UI_SCALE)
@@ -204,11 +211,13 @@ def drawMenu(elapsed_time, menu_elapsed_time,texts, img, CUSTOM_NIGHT_SCROLL, SE
     SCREEN.blit(time_text1, (10, 40))
     pygame.display.update()
 
-def drawIngame(player, elapsed_time, texts, img):
+def drawIngame(player, elapsed_time, texts, img, delta_time):
     SCREEN.fill("black")
     pygame.draw.rect(SCREEN, "red", player)
     for image in img:
         if image.get_id() != "fadein":
+            if isinstance(image, Animation):
+                image.update(delta_time)
             surface = image.get_scr().copy()
             surface.set_alpha(image.get_alpha())
             x = int(image.get_x() * UI_SCALE)
@@ -268,7 +277,37 @@ def create_images(group, width, height, scale):
         )
 
     return images
-    
+
+def get_image(images, image_id, image_subid=None):
+    for image in images:
+        if (image.get_id() == image_id and
+            (image_subid is None or image.get_subid() == image_subid)):
+            return image
+
+    return None
+
+def toggle_door(button, door):
+    if button.get_subid() == "off":
+        button.set_subid("on")
+        button.change_image(
+            "./assets/sprites/Mechanics/Buttons/Doors-Button-On.png"
+        )
+
+        door.set_subid("closed")
+        door.set_alpha(255)
+
+        return "Closed"
+
+    else:
+        button.set_subid("off")
+        button.change_image(
+            "./assets/sprites/Mechanics/Buttons/Doors-Button.png"
+        )
+
+        door.set_subid("open")
+        door.set_alpha(0)
+
+        return "Open"
 
 def main():
     discord.initiate_rpc()
@@ -293,7 +332,6 @@ def main():
     menu_elapsed_time = 0
     LOAD_NIGHT_TIMER = 0
     night_timer=0
-    hour=-4
 
     run = True
 
@@ -304,11 +342,17 @@ def main():
     start_time = time.time()
     elapsed_time = 0
     
+#   Estos son const o variables que se usan en el game loop de las noches.
+
+#   Dirige el tiempo (-4 = 8 PM, -2 = 10 PM, 0 = 12 AM)
+    hour=-4
+#   Indica que tipo de noche (1 = Normal... 4 = XXL)
+    night_type = 1
     officetype = "Compact"
     LEFT_DOOR = "Open"
     RIGHT_DOOR = "Open"
 
-# Animatronicos
+#   Animatronicos
 
     maurello=Animatronic(1,"Maurello",get_fromSave("animatronics.Maurello.ai"))
     furry=Animatronic(1,"Maurello",get_fromSave("animatronics.Maurello.ai"))
@@ -454,61 +498,30 @@ def main():
                                 match image.get_subid():
                                     case "MaurelloMinusAi":
                                         maurello.minus_ai(1)
-                                match image.get_subid():
                                     case "MaurelloAddAi":
                                         maurello.add_ai(1)
                 elif GAMESTATE == "ingame":
                     for text in texts:
                         pass
                     for image in img:
-                        if image.is_trigeable():
-                            rect = image.get_rect()
-                            if rect and rect.collidepoint(mouse_x, mouse_y):
-                                match image.get_id():
-                                    case "LeftButton":
-                                        match image.get_subid():
-                                            case "off":
-                                                image.set_subid("on")
-                                                image.change_image(
-                                                    "./assets/sprites/Mechanics/Buttons/Doors-Button-On.png"
-                                                )
-                                                LEFT_DOOR = "Closed"
-                                                for image in img:
-                                                    if image.get_id() == "LeftDoor":
-                                                        image.set_subid("closed")
-                                                        image.set_alpha(255)
-                                            case "on":
-                                                image.set_subid("off")
-                                                image.change_image(
-                                                    "./assets/sprites/Mechanics/Buttons/Doors-Button.png"
-                                                )
-                                                LEFT_DOOR = "Open"
-                                                for image in img:
-                                                    if image.get_id() == "LeftDoor":
-                                                        image.set_subid("open")
-                                                        image.set_alpha(0)
-                                    case "RightButton":
-                                        match image.get_subid():
-                                            case "off":
-                                                image.set_subid("on")
-                                                image.change_image(
-                                                    "./assets/sprites/Mechanics/Buttons/Doors-Button-On.png"
-                                                )
-                                                RIGHT_DOOR = "Closed"
-                                                for image in img:
-                                                    if image.get_id() == "RightDoor":
-                                                        image.set_subid("closed")
-                                                        image.set_alpha(255)
-                                            case "on":
-                                                image.set_subid("off")
-                                                image.change_image(
-                                                    "./assets/sprites/Mechanics/Buttons/Doors-Button.png"
-                                                )
-                                                RIGHT_DOOR = "Open"
-                                                for image in img:
-                                                    if image.get_id() == "RightDoor":
-                                                        image.set_subid("open")
-                                                        image.set_alpha(0)
+                        if not image.is_trigeable():
+                            continue
+
+                        rect = image.get_rect()
+                        if not rect or not rect.collidepoint(mouse_x, mouse_y):
+                            continue
+
+                        if image.get_id().endswith("Button"):
+
+                            side = image.get_id().replace("Button", "")
+                            door = get_image(img, f"{side}Door")
+
+                            state = toggle_door(image, door)
+
+                            if side == "Left":
+                                LEFT_DOOR = state
+                            else:
+                                RIGHT_DOOR = state
                                         
         if GAMESTATE == "menu":
             if SUBGAMESTATE == "warningscreen":     
@@ -561,7 +574,7 @@ def main():
                     office_ambience=OfficeAmbience
                 )
 
-            drawMenu(elapsed_time, menu_elapsed_time,texts, img, CUSTOM_NIGHT_SCROLL, SETTINGS_SCROLL)
+            drawMenu(elapsed_time, menu_elapsed_time,texts, img, CUSTOM_NIGHT_SCROLL, SETTINGS_SCROLL, delta_time)
 
 
         elif GAMESTATE == "ingame":
@@ -594,7 +607,7 @@ def main():
                 discord=discord
             )
             maurello.update(delta_time)
-            drawIngame(player, elapsed_time, texts, img)
+            drawIngame(player, elapsed_time, texts, img, delta_time)
     pygame.quit()
 # The game will only start only if this python file is executed.
 if __name__ == "__main__":

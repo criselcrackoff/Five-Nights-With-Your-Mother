@@ -15,9 +15,9 @@ class Images:
         self.__subid = sub_id
 
         # Guardamos estos datos para reutilizarlos
-        self.__width = width
-        self.__height = height
-        self.__ui_scale = ui_scale
+        self._width = width
+        self._height = height
+        self._ui_scale = ui_scale
 
         if isBG:
             self.__scr = pygame.transform.scale(
@@ -53,12 +53,6 @@ class Images:
     def get_rect(self):
         return self.__rect
     
-    def get_width(self):
-        return self.__scr.get_width()
-
-    def get_height(self):
-        return self.__scr.get_height()
-    
     def get_subid(self):
         return self.__subid
 
@@ -79,24 +73,28 @@ class Images:
 
     def set_subid(self, subid):
         self.__subid = subid
+
+    def change_surface(self, surface):
+        self.__scr = self.scale_surface(surface)
+    
+    def scale_surface(self, surface):
+
+        if self.__isBG:
+            return pygame.transform.scale(
+                surface,
+                (self._width, self._height)
+            )
+
+        return pygame.transform.scale(
+            surface,
+            (
+                int(surface.get_width() * self._ui_scale),
+                int(surface.get_height() * self._ui_scale)
+            )
+        )
         
-    def change_image(self, path: str):
+    def change_image(self, path):
 
         surface = pygame.image.load(path).convert_alpha()
 
-        if self.__isBG:
-            surface = pygame.transform.scale(
-                surface,
-                (self.__width, self.__height)
-            )
-        else:
-            surface = pygame.transform.scale(
-                surface,
-                (
-                    int(surface.get_width() * self.__ui_scale),
-                    int(surface.get_height() * self.__ui_scale)
-                )
-            )
-
-        self.__scr = surface
-    
+        self.__scr = self.scale_surface(surface)
