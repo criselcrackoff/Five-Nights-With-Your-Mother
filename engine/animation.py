@@ -19,12 +19,12 @@ class Animation(Images):
         fullscreen=False,
         subid=None,
         fps=12,
-        loop=True
+        loop=True,
+        size=None
     ):
 
         self.frames = []
 
-        # Cargar todos los frames
         files = sorted(os.listdir(folder))
 
         for file in files:
@@ -32,33 +32,21 @@ class Animation(Images):
             if not file.endswith(".png"):
                 continue
 
-            surface = pygame.image.load(
+            frame = pygame.image.load(
                 os.path.join(folder, file)
             ).convert_alpha()
 
-            # Escalar igual que Images
-            if fullscreen:
-
-                surface = pygame.transform.scale(
-                    surface,
-                    (width, height)
+            if size is not None:
+                frame = pygame.transform.smoothscale(
+                    frame,
+                    size
                 )
 
-            else:
-
-                surface = pygame.transform.scale(
-                    surface,
-                    (
-                        int(surface.get_width() * scale),
-                        int(surface.get_height() * scale)
-                    )
-                )
-
-            self.frames.append(surface)
+            self.frames.append(frame)
 
         if len(self.frames) == 0:
             raise Exception(
-                f"No animation frames found in {folder}"
+                f"No animation frames found in '{folder}'."
             )
 
         super().__init__(
@@ -76,37 +64,26 @@ class Animation(Images):
         )
 
         self.current_frame = 0
-
         self.animation_speed = fps
-
         self.loop = loop
-
         self.playing = True
-
-        self.reverse = False
-
         self.timer = 0
-
 
     def update(self, delta_time):
 
         if not self.playing:
             return
 
-        self.timer += delta_time
-
         frame_time = 1 / self.animation_speed
+
+        self.timer += delta_time
 
         while self.timer >= frame_time:
 
             self.timer -= frame_time
 
-            if self.reverse:
-                self.current_frame -= 1
-            else:
-                self.current_frame += 1
+            self.current_frame += 1
 
-            # Llegó al final
             if self.current_frame >= len(self.frames):
 
                 if self.loop:
@@ -115,47 +92,25 @@ class Animation(Images):
                 else:
                     self.current_frame = len(self.frames) - 1
                     self.playing = False
+                    break
 
-            # Llegó al inicio reproduciendo al revés
-            elif self.current_frame < 0:
-
-                if self.loop:
-                    self.current_frame = len(self.frames) - 1
-
-                else:
-                    self.current_frame = 0
-                    self.playing = False
-
-            self.change_surface(
-                self.frames[self.current_frame]
-            )
-
+        self.change_surface(
+            self.frames[self.current_frame]
+        )
 
     def play(self):
         self.playing = True
 
-
-    def pause(self):
-        self.playing = False
-
-
-    def resume(self):
-        self.playing = True
-
-
     def stop(self):
         self.playing = False
-        self.current_frame = 0
-        self.timer = 0
-        self.change_surface(self.frames[0])
-
 
     def restart(self):
         self.current_frame = 0
         self.timer = 0
         self.playing = True
-        self.change_surface(self.frames[0])
-
+        self.change_surface(
+            self.frames[0]
+        )
 
     def set_frame(self, frame):
 
@@ -167,37 +122,25 @@ class Animation(Images):
         self.current_frame = frame
 
         self.change_surface(
-            self.frames[self.current_frame]
+            self.frames[frame]
         )
-
-
-    def set_reverse(self, reverse):
-        self.reverse = reverse
-
 
     def get_frame(self):
         return self.current_frame
 
-
     def get_total_frames(self):
         return len(self.frames)
-
 
     def is_playing(self):
         return self.playing
 
-
     def is_finished(self):
 
         return (
-            not self.loop and
-            not self.playing
+            not self.loop
+            and not self.playing
+            and self.current_frame == len(self.frames) - 1
         )
-
 
     def set_fps(self, fps):
         self.animation_speed = fps
-
-
-    def get_fps(self):
-        return self.animation_speed

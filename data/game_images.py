@@ -236,6 +236,21 @@ IMAGES = {
         },
 
         {
+            "type":"animation",
+            "id":"Desk",
+            "folder":"./assets/animations/DeskFan",
+            "alpha":255,
+            "trigger":False,
+            "x":265,
+            "y":340,
+            "fullscreen":False,
+            "subid":None,
+            "fps": 20,
+            "loop": True,
+            "size":(750,384),
+        },
+
+        {
             "type":"image",
             "id":"CameraBar",
             "path":"./assets/sprites/Mechanics/Buttons/Monitor Button.png",

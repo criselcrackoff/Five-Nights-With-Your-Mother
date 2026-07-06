@@ -273,7 +273,8 @@ def create_images(group, width, height, scale):
                     subid=data["subid"],
 
                     fps=data.get("fps",12),
-                    loop=data.get("loop",True)
+                    loop=data.get("loop",True),
+                    size=data.get("size")
 
                 )
 
