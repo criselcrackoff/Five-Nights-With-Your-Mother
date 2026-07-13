@@ -165,7 +165,7 @@ IMAGES = {
 
         {
             "type":"image",
-            "id":"office",
+            "id":"background",
             "path":"./assets/sprites/CompactOffice/Office.png",
             "alpha":255,
             "x":0,

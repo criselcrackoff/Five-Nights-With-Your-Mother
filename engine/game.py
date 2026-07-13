@@ -20,7 +20,7 @@ from states.custom_night import custom_night_main
 from states.load_night import load_night_main
 from states.ingame import ingame_main
 
-from scripts import office
+from scripts.power import PowerScript
 
 
 class Game:
@@ -240,6 +240,7 @@ class Game:
 
         self.LEFT_DOOR = "Open"
         self.RIGHT_DOOR = "Open"
+        self.blackout = False
 
         # -------------------------
         # Runtime Containers
@@ -247,6 +248,13 @@ class Game:
 
         self.texts = []
         self.images = []
+
+        # -------------------------
+        # Script Container 
+        # -------------------------
+
+        self.scripts = []
+
     def drawMenu(self):
 
         self.SCREEN.fill("black")
@@ -723,6 +731,13 @@ class Game:
             else:
                 self.RIGHT_DOOR = "Open"
 
+    def add_script(self, script_class):
+        script = script_class(self)
+        self.scripts.append(script)
+
+    def add_script(self, script_class):
+        self.scripts.append(script_class(self))
+
     def load_resources(self):
 
         #
@@ -853,6 +868,15 @@ class Game:
 
             if event.type == pygame.QUIT:
                 return False
+            
+            #
+            # Usar Scripts
+            #
+            try:
+                for script in self.scripts:
+                    script.event(event)
+            except:
+                pass
 
             #
             # Scroll
@@ -903,7 +927,6 @@ class Game:
                 elif self.GAMESTATE == "ingame":
 
                     self.handle_ingame_click()
-
         return True
 
     def handle_menu_click(self):
@@ -1102,45 +1125,13 @@ class Game:
         # LOAD NIGHT
         #
 
-        elif self.SUBGAMESTATE == "LoadNight":
-
-            (
-
-                self.GAMESTATE,
-                self.SUBGAMESTATE,
-
-                self.LOAD_NIGHT_TIMER,
-
-                self.MUSIC_STOPPED
-
-            ) = load_night_main(
-
-                texts=self.texts,
-                img=self.images,
-
-                delta_time=self.delta_time,
-
-                load_night_timer=self.LOAD_NIGHT_TIMER,
-
-                music_stopped=self.MUSIC_STOPPED,
-
-                hour=self.hour,
-
-                mixer_sound=self.mixer,
-
-                channel_menu=self.CHANNEL_MENU,
-
-                channel_ambient=self.CHANNEL_AMBIENT,
-
-                office_ambience=OfficeAmbience
-
-            )
+        elif self.SUBGAMESTATE == "LoadNight": 
+            load_night_main(self)
 
     def update_ingame(self):
 
         self.texts = self.INGAME_TEXTS
         self.images = self.INGAME_IMG
-
         (
 
             self.player_x,
@@ -1189,6 +1180,9 @@ class Game:
 
     def update(self):
 
+        for script in self.scripts:
+            script.update(self.delta_time)
+
         #
         # MENU
         #
@@ -1221,9 +1215,7 @@ class Game:
             self.menu_elapsed_time = time.time() - self.menu_start_time
 
             running = self.handle_events()
-
             self.update()
-
             if self.GAMESTATE == "menu":
                 self.drawMenu()
             else:
