@@ -68,7 +68,7 @@ class Game:
         # Version
         # -------------------------
 
-        self.VERSION = "1.0.2.2"
+        self.VERSION = "1.0.2.7"
 
         # -------------------------
         # Window
@@ -127,7 +127,8 @@ class Game:
             30,
             25,
             20,
-            15
+            15,
+            10
         ]
 
         self.CLOCK = pygame.font.Font(
@@ -158,6 +159,11 @@ class Game:
         self.H5 = pygame.font.Font(
             self.FONT_PATH,
             int(self.FONT_SIZE[5] * self.UI_SCALE)
+        )
+
+        self.H6 = pygame.font.Font(
+            self.FONT_PATH,
+            int(self.FONT_SIZE[7] * self.UI_SCALE)
         )
 
         self.P = pygame.font.Font(
@@ -824,6 +830,8 @@ class Game:
             Text(0, "12", self.H1, "white", 255, False, 1150, 15, "Hour"),
             Text(0, "AM", self.H1, "white", 255, False, 1210, 15, "Period"),
             Text(0, "Custom Night", self.H4, "white", 255, False, 1080, 60),
+            Text(1, "Percentage", self.H2, "white", 255, False, 67, 606, "Power%"),
+            Text(1, "%", self.H5, "white", 255, False, 111, 611),
         ]
 
         #
