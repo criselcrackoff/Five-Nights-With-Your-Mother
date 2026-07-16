@@ -21,7 +21,7 @@ from states.load_night import load_night_main
 from states.ingame import ingame_main
 
 from scripts.power import PowerScript
-
+from scripts.cameras import CameraScript
 
 class Game:
 
@@ -249,6 +249,7 @@ class Game:
         self.blackout = False
         self.usage = 1
         self.power = None
+        self.monitor = None
 
         # -------------------------
         # Runtime Containers

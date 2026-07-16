@@ -257,7 +257,7 @@ IMAGES = {
             "alpha":175,
             "x":500,
             "y":644,
-            "trigger":False,
+            "trigger":True,
             "fullscreen":False,
             "subid":None
         },
@@ -272,6 +272,20 @@ IMAGES = {
             "trigger":False,
             "fullscreen":False,
             "subid":None
+        },
+
+        {
+            "type":"animation",
+            "id":"Monitor",
+            "folder":"./assets/animations/CameraPanel",
+            "alpha":255,
+            "trigger":False,
+            "x":0,
+            "y":0,
+            "fullscreen":False,
+            "subid":None,
+            "fps": 40,
+            "loop": False
         },
 
         {

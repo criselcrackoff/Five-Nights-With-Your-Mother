@@ -11,14 +11,6 @@ class PowerScript(Script):
             ).convert_alpha()
             for i in range(1, 7)
         }
-    def event(self, event):
-        if event.type == pygame.KEYDOWN:
-
-            if event.key == pygame.K_o:
-                self.game.usage += 1
-
-            elif event.key == pygame.K_l:
-                self.game.usage -= 1
 
     def update(self, dt):
 
