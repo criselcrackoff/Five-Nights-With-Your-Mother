@@ -2,6 +2,7 @@ from random import randrange
 from data.sounds import *
 from scripts.power import PowerScript
 from scripts.cameras import CameraScript
+from scripts.doors_key import Doors
 def load_night_main(game):
 
     game.LOAD_NIGHT_TIMER += game.delta_time
@@ -93,5 +94,6 @@ def load_night_main(game):
         game.monitor.set_alpha(0)
         game.add_script(PowerScript)
         game.add_script(CameraScript)
+        game.add_script(Doors)
         game.power = game.get_script(PowerScript)
         game.GAMESTATE = "ingame"

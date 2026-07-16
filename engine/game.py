@@ -23,6 +23,8 @@ from states.ingame import ingame_main
 from scripts.power import PowerScript
 from scripts.cameras import CameraScript
 
+
+
 class Game:
 
     def __init__(self):
@@ -47,7 +49,7 @@ class Game:
         # Audio
         # -------------------------
 
-        self.mixer = MixerMusic()
+        self.mixer = MixerMusic(64)
         self.mixer.connect()
 
         # -------------------------
@@ -111,7 +113,8 @@ class Game:
         self.CHANNEL_AMBIENT = 1
         self.CHANNEL_MUSIC = 2
 
-        self.CHANNEL_SFX = list(range(3, 16))
+        self.CHANNEL_SFX = list(range(3, 18))
+        self.CHANNEL_DOOR = list(range(19,27))
         self.CHANNEL_VOICE = {}
 
         # -------------------------
@@ -723,10 +726,19 @@ class Game:
             if side == "Left":
                 self.LEFT_DOOR = "Closed"
                 self.usage += 1
+                self.mixer.play(
+                        Door_Close,
+                        volume=0.3,
+                        channel=self.CHANNEL_DOOR
+                    )
             else:
                 self.RIGHT_DOOR = "Closed"
                 self.usage += 1
-
+                self.mixer.play(
+                        Door_Close,
+                        volume=0.3,
+                        channel=self.CHANNEL_DOOR
+                    )
         else:
 
             button.set_subid("off")
@@ -741,10 +753,19 @@ class Game:
             if side == "Left":
                 self.LEFT_DOOR = "Open"
                 self.usage -= 1
+                self.mixer.play(
+                        Door_Open,
+                        volume=0.3,
+                        channel=self.CHANNEL_DOOR
+                    )
             else:
                 self.RIGHT_DOOR = "Open"
                 self.usage -= 1
-
+                self.mixer.play(
+                        Door_Open,
+                        volume=0.3,
+                        channel=self.CHANNEL_DOOR
+                    )
     def add_script(self, script_class):
         self.scripts.append(script_class(self))
     
