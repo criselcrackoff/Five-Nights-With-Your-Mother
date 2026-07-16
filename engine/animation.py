@@ -68,6 +68,7 @@ class Animation(Images):
         self.loop = loop
         self.playing = True
         self.timer = 0
+        self.reverse = False
 
     def update(self, delta_time):
 
@@ -75,42 +76,62 @@ class Animation(Images):
             return
 
         frame_time = 1 / self.animation_speed
-
         self.timer += delta_time
 
         while self.timer >= frame_time:
 
             self.timer -= frame_time
 
-            self.current_frame += 1
+            if self.reverse:
 
-            if self.current_frame >= len(self.frames):
+                self.current_frame -= 1
 
-                if self.loop:
-                    self.current_frame = 0
+                if self.current_frame < 0:
 
-                else:
-                    self.current_frame = len(self.frames) - 1
-                    self.playing = False
-                    break
+                    if self.loop:
+                        self.current_frame = len(self.frames) - 1
+                    else:
+                        self.current_frame = 0
+                        self.playing = False
+                        break
+
+            else:
+
+                self.current_frame += 1
+
+                if self.current_frame >= len(self.frames):
+
+                    if self.loop:
+                        self.current_frame = 0
+                    else:
+                        self.current_frame = len(self.frames) - 1
+                        self.playing = False
+                        break
 
         self.change_surface(
             self.frames[self.current_frame]
         )
 
-    def play(self):
+    def play(self, reverse=False):
+
+        self.reverse = reverse
         self.playing = True
+        self.timer = 0
+
+        if reverse:
+            self.current_frame = len(self.frames) - 1
+        else:
+            self.current_frame = 0
+
+        self.change_surface(
+            self.frames[self.current_frame]
+        )
 
     def stop(self):
         self.playing = False
 
     def restart(self):
-        self.current_frame = 0
-        self.timer = 0
-        self.playing = True
-        self.change_surface(
-            self.frames[0]
-        )
+        self.play(reverse=self.reverse)
 
     def set_frame(self, frame):
 
@@ -136,9 +157,17 @@ class Animation(Images):
 
     def is_finished(self):
 
+        if self.loop:
+            return False
+
+        if self.reverse:
+            return (
+                not self.playing
+                and self.current_frame == 0
+            )
+
         return (
-            not self.loop
-            and not self.playing
+            not self.playing
             and self.current_frame == len(self.frames) - 1
         )
 
