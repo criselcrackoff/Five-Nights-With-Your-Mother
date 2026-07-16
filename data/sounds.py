@@ -1,2 +1,5 @@
 Custom_Menu = "./assets/bgm/CustomNightTheme.mp3"
 OfficeAmbience = ["./assets/bgm/NewAmbience.mp3","./assets/bgm/TheForbiddenNocturne.wav","./assets/bgm/watchyoursix.mp3","./assets/bgm/DragMetotheCrusher.wav"]
+Door_Open = "./assets/sfx/Doors/Door.mp3"
+Door_Close = "./assets/sfx/Doors/Window.mp3"
+Tablet = "./assets/sfx/tablet.mp3"
