@@ -65,6 +65,15 @@ class Images:
     def set_rect(self, rect):
         self.__rect = rect
 
+    def set_x(self, x):
+        self.__x = x
+
+    def set_y(self, y):
+        self.__y = y
+
+    def set_trigeable(self, trigger):
+        self.__trigeable = trigger
+
     def is_trigeable(self):
         return self.get_trigeable()
     
