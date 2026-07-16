@@ -247,6 +247,8 @@ class Game:
         self.LEFT_DOOR = "Open"
         self.RIGHT_DOOR = "Open"
         self.blackout = False
+        self.usage = 1
+        self.power = None
 
         # -------------------------
         # Runtime Containers
@@ -509,13 +511,14 @@ class Game:
         pygame.display.update() 
     def drawIngame(self):
 
-        self.SCREEN.fill("black")
-
         pygame.draw.rect(
             self.SCREEN,
             "red",
             self.player
         )
+
+        self.SCREEN.fill("black")
+
 
         #
         # IMÁGENES
@@ -718,8 +721,10 @@ class Game:
 
             if side == "Left":
                 self.LEFT_DOOR = "Closed"
+                self.usage += 1
             else:
                 self.RIGHT_DOOR = "Closed"
+                self.usage += 1
 
         else:
 
@@ -734,15 +739,21 @@ class Game:
 
             if side == "Left":
                 self.LEFT_DOOR = "Open"
+                self.usage -= 1
             else:
                 self.RIGHT_DOOR = "Open"
-
-    def add_script(self, script_class):
-        script = script_class(self)
-        self.scripts.append(script)
+                self.usage -= 1
 
     def add_script(self, script_class):
         self.scripts.append(script_class(self))
+    
+    def get_script(self, script_class):
+
+        for script in self.scripts:
+            if isinstance(script, script_class):
+                return script
+
+        return None
 
     def load_resources(self):
 
@@ -832,6 +843,7 @@ class Game:
             Text(0, "Custom Night", self.H4, "white", 255, False, 1080, 60),
             Text(1, "Percentage", self.H2, "white", 255, False, 67, 606, "Power%"),
             Text(1, "%", self.H5, "white", 255, False, 111, 611),
+            Text(1, "Usage", self.P, "white", 255, False, 37, 658)
         ]
 
         #
@@ -880,11 +892,10 @@ class Game:
             #
             # Usar Scripts
             #
-            try:
-                for script in self.scripts:
-                    script.event(event)
-            except:
-                pass
+
+            for script in self.scripts:
+                script.event(event)
+
 
             #
             # Scroll
@@ -1138,8 +1149,6 @@ class Game:
 
     def update_ingame(self):
 
-        self.texts = self.INGAME_TEXTS
-        self.images = self.INGAME_IMG
         (
 
             self.player_x,

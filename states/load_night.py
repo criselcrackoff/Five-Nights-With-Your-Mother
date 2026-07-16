@@ -86,5 +86,8 @@ def load_night_main(game):
     else:
 
         game.MUSIC_STOPPED = False
+        game.texts = game.INGAME_TEXTS
+        game.images = game.INGAME_IMG
         game.add_script(PowerScript)
+        game.power = game.get_script(PowerScript)
         game.GAMESTATE = "ingame"

@@ -276,6 +276,30 @@ IMAGES = {
 
         {
             "type":"image",
+            "id":"PowerContainer",
+            "path":"./assets/sprites/Mechanics/PowerUsage/power_usage_container.png",
+            "alpha":255,
+            "x":38,
+            "y":639,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "type":"image",
+            "id":"PowerProgress",
+            "path":"./assets/sprites/Mechanics/PowerUsage/power_usage_progression_1.png",
+            "alpha":255,
+            "x":38,
+            "y":639,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "type":"image",
             "id":"fadein",
             "path":"./assets/sprites/onepixel.png",
             "alpha":255,
