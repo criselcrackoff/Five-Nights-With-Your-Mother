@@ -4,7 +4,7 @@ import os
 SAVE_PATH = "./save/save.json"
 
 DEFAULT_SAVE = {
-    "version": "1.0.2.8",
+    "version": "1.0.2.9",
 
     "progress": {
         "stars": 0,

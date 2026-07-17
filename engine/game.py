@@ -71,7 +71,7 @@ class Game:
         # Version
         # -------------------------
 
-        self.VERSION = "1.0.2.8"
+        self.VERSION = "1.0.2.9"
 
         # -------------------------
         # Window
