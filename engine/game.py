@@ -60,8 +60,8 @@ class Game:
         self.BASE_WIDTH = 1280
         self.BASE_HEIGHT = 720
 
-        self.WIDTH = 1280
-        self.HEIGHT = 720
+        self.WIDTH = 1920
+        self.HEIGHT = 1080
 
         self.UI_SCALE = self.HEIGHT / self.BASE_HEIGHT
 
@@ -71,7 +71,7 @@ class Game:
         # Version
         # -------------------------
 
-        self.VERSION = "1.0.2.9"
+        self.VERSION = "1.0.3.0"
 
         # -------------------------
         # Window
@@ -659,33 +659,21 @@ class Game:
                     data["path"]
                 ).convert_alpha()
 
-                if "size" in data:
-
-                    surface = pygame.transform.smoothscale(
-                        surface,
-                        data["size"]
-                    )
-
                 images.append(
 
                     Images(
-
                         id=data["id"],
                         scr=surface,
-
                         trigeable=data["trigger"],
                         alpha_cn=data["alpha"],
-
                         xPos=data["x"],
                         yPos=data["y"],
-
                         width=self.WIDTH,
                         height=self.HEIGHT,
                         ui_scale=self.UI_SCALE,
-
                         isBG=data.get("fullscreen", False),
-                        sub_id=data.get("subid")
-
+                        sub_id=data.get("subid"),
+                        size=data.get("size")
                     )
 
                 )
@@ -796,13 +784,15 @@ class Game:
         self.maurello = Animatronic(
             1,
             "Maurello",
-            get_fromSave("animatronics.Maurello.ai")
+            get_fromSave("animatronics.Maurello.ai"),
+            get_fromSave("animatronics.Maurello.path")
         )
 
         self.furry = Animatronic(
             1,
             "Maurello",
-            get_fromSave("animatronics.Maurello.ai")
+            get_fromSave("animatronics.Maurello.ai"),
+            get_fromSave("animatronics.Maurello.path")
         )
 
         #
