@@ -3,3 +3,6 @@ OfficeAmbience = ["./assets/bgm/NewAmbience.mp3","./assets/bgm/TheForbiddenNoctu
 Door_Open = "./assets/sfx/Doors/Door.mp3"
 Door_Close = "./assets/sfx/Doors/Window.mp3"
 Tablet = "./assets/sfx/tablet.mp3"
+Mask_Open = "./assets/sfx/MaskOn.mp3"
+Mask_Close = "./assets/sfx/MaskOff.mp3"
+Mask_Breathing = "./assets/sfx/MaskBreathing.mp3"
