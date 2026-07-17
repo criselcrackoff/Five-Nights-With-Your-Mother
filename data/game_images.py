@@ -1,7 +1,12 @@
 import pygame
 comoffice = "./assets/sprites/CompactOffice/Office.png"
 cam1 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Hall.png"
-
+cam2 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Bedroom2.png"
+cam3 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Bedroom.png"
+cam4 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Hall.png"
+cam5 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Hall.png"
+maurello_sprite1 = "./assets/sprites/Animatronics/Maurello/Maurello2.png"
+maurello_sprite2 = "./assets/sprites/Animatronics/Maurello/Maurello-behind.png"
 IMAGES = {
 
     "WARNING": [
@@ -253,6 +258,18 @@ IMAGES = {
 
         {
             "type":"image",
+            "id":"maurellobg",
+            "path":"./assets/sprites/CompactOffice/Office.png",
+            "alpha":0,
+            "x":0,
+            "y":0,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "type":"image",
             "id":"CameraBar",
             "path":"./assets/sprites/Mechanics/Buttons/Monitor Button.png",
             "alpha":175,
@@ -309,12 +326,25 @@ IMAGES = {
             "folder":"./assets/animations/Map",
             "alpha":0,
             "trigger":False,
-            "x":0,
-            "y":0,
-            "fullscreen":True,
+            "x":950,
+            "y":400,
+            "fullscreen":False,
             "subid":None,
             "fps": 1,
-            "loop": False
+            "loop": True
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/PowerUsage/power_usage_container.png",
+            "alpha":0,
+            "x":38,
+            "y":639,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":"1",
+            "size":(36,22)
         },
 
         {
