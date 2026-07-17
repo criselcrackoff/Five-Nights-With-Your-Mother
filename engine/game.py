@@ -22,6 +22,7 @@ from states.ingame import ingame_main
 
 from scripts.power import PowerScript
 from scripts.cameras import CameraScript
+from scripts.mask import MaskScript
 
 
 
@@ -70,7 +71,7 @@ class Game:
         # Version
         # -------------------------
 
-        self.VERSION = "1.0.2.7"
+        self.VERSION = "1.0.2.8"
 
         # -------------------------
         # Window
@@ -112,9 +113,9 @@ class Game:
         self.CHANNEL_MENU = 0
         self.CHANNEL_AMBIENT = 1
         self.CHANNEL_MUSIC = 2
-
-        self.CHANNEL_SFX = list(range(3, 18))
-        self.CHANNEL_DOOR = list(range(19,27))
+        self.CHANNEL_MASK = 3
+        self.CHANNEL_DOOR = list(range(4, 12))
+        self.CHANNEL_SFX = list(range(13, 28))
         self.CHANNEL_VOICE = {}
 
         # -------------------------
@@ -253,6 +254,9 @@ class Game:
         self.usage = 1
         self.power = None
         self.monitor = None
+        self.ismonitoropen = None
+        self.mask = None
+        self.ismaskopen = None
 
         # -------------------------
         # Runtime Containers
@@ -769,11 +773,17 @@ class Game:
     def add_script(self, script_class):
         self.scripts.append(script_class(self))
     
-    def get_script(self, script_class):
+    def get_script(self, script):
 
-        for script in self.scripts:
-            if isinstance(script, script_class):
-                return script
+        for scr in self.scripts:
+
+            if script == scr.__class__.__name__:
+                return scr
+
+            if isinstance(script, type):
+
+                if isinstance(scr, script):
+                    return scr
 
         return None
 

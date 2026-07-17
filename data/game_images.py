@@ -289,6 +289,20 @@ IMAGES = {
         },
 
         {
+            "type":"animation",
+            "id":"Mask",
+            "folder":"./assets/animations/Mask",
+            "alpha":255,
+            "trigger":False,
+            "x":0,
+            "y":0,
+            "fullscreen":True,
+            "subid":None,
+            "fps": 60,
+            "loop": False
+        },
+
+        {
             "type":"image",
             "id":"PowerContainer",
             "path":"./assets/sprites/Mechanics/PowerUsage/power_usage_container.png",

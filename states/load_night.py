@@ -2,6 +2,7 @@ from random import randrange
 from data.sounds import *
 from scripts.power import PowerScript
 from scripts.cameras import CameraScript
+from scripts.mask import MaskScript
 from scripts.doors_key import Doors
 def load_night_main(game):
 
@@ -92,8 +93,11 @@ def load_night_main(game):
         game.images = game.INGAME_IMG
         game.monitor = game.get_image("Monitor")
         game.monitor.set_alpha(0)
+        game.mask = game.get_image("Mask")
+        game.mask.set_alpha(0)
         game.add_script(PowerScript)
         game.add_script(CameraScript)
+        game.add_script(MaskScript)
         game.add_script(Doors)
         game.power = game.get_script(PowerScript)
         game.GAMESTATE = "ingame"

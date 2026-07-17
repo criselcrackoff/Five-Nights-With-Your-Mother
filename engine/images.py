@@ -56,6 +56,18 @@ class Images:
     def get_subid(self):
         return self.__subid
 
+    def get_width(self):
+        return self._width 
+    
+    def get_height(self):
+        return self._height
+    
+    def get_surface_width(self):
+        return self.__scr.get_width()
+
+    def get_surface_height(self):
+        return self.__scr.get_height()
+
     def is_BG(self):
         return self.__isBG
 
