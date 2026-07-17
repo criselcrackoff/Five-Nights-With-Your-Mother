@@ -29,13 +29,14 @@ class MaskScript(Script):
     def update(self, dt):
 
         mouse = (self.game.mouse_x, self.game.mouse_y)
-
+        ui = self.game.UI_SCALE
         mask_zone = pygame.Rect(
-            self.button.get_x() - self.trigger_padding,
-            self.button.get_y() - self.trigger_padding,
+            int(self.button.get_x() * ui) - self.trigger_padding,
+            int(self.button.get_y() * ui) - self.trigger_padding,
             self.button.get_surface_width() + self.trigger_padding * 2,
             self.button.get_surface_height() + self.trigger_padding * 2
-        )
+            )
+
 
         inside = mask_zone.collidepoint(mouse)
 
@@ -80,7 +81,8 @@ class MaskScript(Script):
                 return
 
             if camera.open:
-                camera.close_camera()
+                # camera.close_camera()
+                return None
 
         if self.open:
             self.close_mask()
