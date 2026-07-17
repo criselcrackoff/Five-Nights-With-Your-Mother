@@ -31,23 +31,40 @@ class CameraScript(Script):
         self.desk = self.game.get_image("Desk")
         self.leftdoor = self.game.get_image("LeftDoor")
         self.rightdoor = self.game.get_image("RightDoor")
+        self.maskbar = self.game.get_image("MaskBar")
+        
+        # 
+        # Camera Elements
+        #
+
+        self.map = self.game.get_image("Map")
+        self.maurello = self.game.get_image("maurellobg")
+        self.animatronics = [self.game.maurello]
+
     def event(self, event):
 
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_s:
                 self.toggle()
+            
+            if event.key == pygame.K_i:
+                self.camera -= 1
+                self.show_camera_feed()
+            if event.key == pygame.K_o:
+                self.camera += 1
+                self.show_camera_feed()
 
     def update(self, dt):
 
         mouse = (self.game.mouse_x, self.game.mouse_y)
-
+        ui = self.game.UI_SCALE
         camera_zone = pygame.Rect(
-            self.button.get_x() - self.trigger_padding,
-            self.button.get_y() - self.trigger_padding,
+            int(self.button.get_x() * ui) - self.trigger_padding,
+            int(self.button.get_y() * ui) - self.trigger_padding,
             self.button.get_surface_width() + self.trigger_padding * 2,
             self.button.get_surface_height() + self.trigger_padding * 2
-        )
+            )
 
         inside = camera_zone.collidepoint(mouse)
 
@@ -61,16 +78,19 @@ class CameraScript(Script):
         if self.waiting_animation and self.cameranimation.is_finished():
 
             if self.open:
-
-                self.left.set_y(990)
-                self.leftbg.set_y(990)
-                self.right.set_y(990)
-                self.desk.set_alpha(0)
-                self.leftdoor.set_y(990)
-                self.rightdoor.set_y(990)
                 self.show_camera_feed()
+                self.hide_office_elements()
             self.waiting_animation = False
             self.cameranimation.set_alpha(0)
+        refresh = False
+
+        for anim in self.animatronics:
+            if anim.needs_refresh:
+                refresh = True
+                anim.needs_refresh = False
+
+        if refresh and self.open:
+            self.show_camera_feed()
 
     def toggle(self):
 
@@ -116,17 +136,78 @@ class CameraScript(Script):
         self.game.usage -= 1
 
         self.waiting_animation = True
+        self.show_office_elements()
+        self.hide_camera_feed()
+        self.cameranimation.set_alpha(255)
+        self.cameranimation.play(reverse=True)
 
+    def show_camera_feed(self):
+
+        if self.camera == 1:
+            self.camera_feed.change_image(cam1)
+
+        elif self.camera == 2:
+            self.camera_feed.change_image(cam2)
+
+        elif self.camera == 3:
+            self.camera_feed.change_image(cam3)
+
+        else:
+            self.camera_feed.change_image(cam1)
+
+        # Ocultar placeholder por defecto
+        self.maurello.set_alpha(0)
+
+        # Dibujar animatrónicos presentes en esta cámara
+        for anim in self.animatronics:
+
+            if anim.get_camera() != self.camera:
+                continue
+
+            self.maurello.change_image(
+                anim.get_sprite()
+            )
+
+            self.maurello.set_size(
+                anim.get_size()
+            )
+
+            self.maurello.set_x(
+                anim.get_x()
+            )
+
+            self.maurello.set_y(
+                anim.get_y()
+            )
+
+            self.maurello.set_alpha(255)
+
+        self.map.set_alpha(255)
+    def hide_camera_feed(self):
+
+        self.map.set_alpha(0)
+
+        self.maurello.set_alpha(0)
+
+        self.camera_feed.change_image(comoffice)
+    def toggle_office_elements(self):
+        if self.open:
+            self.hide_office_elements()
+        else:
+            self.show_office_elements()
+    def show_office_elements(self):
         self.left.set_y(390)
         self.leftbg.set_y(236)
         self.right.set_y(390)
         self.desk.set_alpha(255)
         self.leftdoor.set_y(0)
         self.rightdoor.set_y(0)
-        self.cameranimation.set_alpha(255)
-        self.cameranimation.play(reverse=True)
-
-    def show_camera_feed(self):
-        self.camera_feed.change_image(cam1)
-    def hide_camera_feed(self):
-        self.camera_feed.change_image(comoffice)
+        self.maskbar.set_alpha(255)
+    def hide_office_elements(self):
+        self.left.set_y(990)
+        self.leftbg.set_y(990)
+        self.right.set_y(990)
+        self.desk.set_alpha(0)
+        self.leftdoor.set_y(990)
+        self.rightdoor.set_y(990)
+        self.maskbar.set_alpha(0)
