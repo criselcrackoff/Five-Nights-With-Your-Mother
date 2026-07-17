@@ -34,7 +34,21 @@ DEFAULT_SAVE = {
                 "ai": 5,
                 "ignoremask": True,
                 "jumpscare": [ "./assets/sfx/Furry.mp3" ],
-                "path": []
+                "path": [
+                    {
+                        "cam": 3,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello2.png",
+                        "size": (400,556),
+                        "x": 910,
+                        "y": 147,
+                    },{
+                        "cam": 1,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello-behind.png",
+                        "size": (500,695),
+                        "x": 393,
+                        "y": 339,
+                    },
+                ]
             },
         "Furry": {
                 "ai": 5,
