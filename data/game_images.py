@@ -1,5 +1,6 @@
 import pygame
-
+comoffice = "./assets/sprites/CompactOffice/Office.png"
+cam1 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Hall.png"
 
 IMAGES = {
 
@@ -299,6 +300,20 @@ IMAGES = {
             "fullscreen":True,
             "subid":None,
             "fps": 60,
+            "loop": False
+        },
+
+        {
+            "type":"animation",
+            "id":"Map",
+            "folder":"./assets/animations/Map",
+            "alpha":0,
+            "trigger":False,
+            "x":0,
+            "y":0,
+            "fullscreen":True,
+            "subid":None,
+            "fps": 1,
             "loop": False
         },
 

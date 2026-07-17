@@ -3,7 +3,7 @@ import time
 import random
 
 from data.sounds import *
-from data.game_images import IMAGES
+from data.game_images import *
 
 from engine.images import Images
 from engine.animation import Animation

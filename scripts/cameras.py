@@ -1,5 +1,6 @@
 from engine.scripts import Script
 from data.sounds import *
+from data.game_images import *
 import pygame
 
 
@@ -10,13 +11,13 @@ class CameraScript(Script):
 
         self.open = False
         self.camera = 1
-
+        
         self.cameranimation = self.game.monitor
         self.waiting_animation = False
 
         self.mouse_in_trigger = False
         self.trigger_padding = 20
-
+        self.camera_feed = self.game.get_image("background")
         self.button = self.game.get_image("CameraBar")
 
         for image in self.game.images:
@@ -26,7 +27,10 @@ class CameraScript(Script):
 
             elif image.get_id() == "RightButton":
                 self.right = image
-
+        self.leftbg = self.game.get_image("LeftButtonbg")
+        self.desk = self.game.get_image("Desk")
+        self.leftdoor = self.game.get_image("LeftDoor")
+        self.rightdoor = self.game.get_image("RightDoor")
     def event(self, event):
 
         if event.type == pygame.KEYDOWN:
@@ -59,8 +63,12 @@ class CameraScript(Script):
             if self.open:
 
                 self.left.set_y(990)
+                self.leftbg.set_y(990)
                 self.right.set_y(990)
-
+                self.desk.set_alpha(0)
+                self.leftdoor.set_y(990)
+                self.rightdoor.set_y(990)
+                self.show_camera_feed()
             self.waiting_animation = False
             self.cameranimation.set_alpha(0)
 
@@ -110,7 +118,15 @@ class CameraScript(Script):
         self.waiting_animation = True
 
         self.left.set_y(390)
+        self.leftbg.set_y(236)
         self.right.set_y(390)
-
+        self.desk.set_alpha(255)
+        self.leftdoor.set_y(0)
+        self.rightdoor.set_y(0)
         self.cameranimation.set_alpha(255)
         self.cameranimation.play(reverse=True)
+
+    def show_camera_feed(self):
+        self.camera_feed.change_image(cam1)
+    def hide_camera_feed(self):
+        self.camera_feed.change_image(comoffice)
