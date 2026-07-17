@@ -24,20 +24,8 @@ class PowerScript(Script):
         if self.power < 10:
             if int(self.game.texts[3].get_x()) != 82:
                 self.game.texts[3].set_x(82)
-                try:
-                    self.game.texts[4].set_x(106)
-                except:
-                    pass
-            else:
-                pass
         else:
             if int(self.game.texts[3].get_x()) != 67:
                 self.game.texts[3].set_x(67)
-                try:
-                    self.game.texts[4].set_x(111)
-                except:
-                    pass
-            else:
-                pass
         progress.change_image(f"./assets/sprites/Mechanics/PowerUsage/power_usage_progression_{usage}.png")
         self.game.texts[3].set_text(str(int(self.power)))
