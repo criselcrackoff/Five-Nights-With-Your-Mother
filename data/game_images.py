@@ -3,8 +3,9 @@ comoffice = "./assets/sprites/CompactOffice/Office.png"
 cam1 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Hall.png"
 cam2 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Bedroom2.png"
 cam3 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Bedroom.png"
-cam4 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Hall.png"
-cam5 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Hall.png"
+cam4 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Livingroom.png"
+cam5 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Bathroom.png"
+unavailable = "./assets/sprites/Mechanics/Cameras/Camera-bg/Disabled.png"
 maurello_sprite1 = "./assets/sprites/Animatronics/Maurello/Maurello2.png"
 maurello_sprite2 = "./assets/sprites/Animatronics/Maurello/Maurello-behind.png"
 IMAGES = {
@@ -337,7 +338,7 @@ IMAGES = {
         {
             "type":"image",
             "id":"Cambutton",
-            "path":"./assets/sprites/Mechanics/PowerUsage/power_usage_container.png",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H1.png",
             "alpha":0,
             "x":38,
             "y":639,
