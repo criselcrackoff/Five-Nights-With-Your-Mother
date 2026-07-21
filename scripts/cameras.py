@@ -152,8 +152,14 @@ class CameraScript(Script):
         elif self.camera == 3:
             self.camera_feed.change_image(cam3)
 
+        elif self.camera == 4:
+            self.camera_feed.change_image(cam4)
+
+        elif self.camera == 5:
+            self.camera_feed.change_image(cam5)
+
         else:
-            self.camera_feed.change_image(cam1)
+            self.camera_feed.change_image(unavailable)
 
         # Ocultar placeholder por defecto
         self.maurello.set_alpha(0)
