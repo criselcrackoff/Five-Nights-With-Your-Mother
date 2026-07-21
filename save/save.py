@@ -4,7 +4,7 @@ import os
 SAVE_PATH = "./save/save.json"
 
 DEFAULT_SAVE = {
-    "version": "1.0.2.9",
+    "version": "1.0.3.1",
 
     "progress": {
         "stars": 0,
@@ -41,6 +41,30 @@ DEFAULT_SAVE = {
                         "size": (400,556),
                         "x": 910,
                         "y": 147,
+                    },{
+                        "cam": 1,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello-behind.png",
+                        "size": (500,695),
+                        "x": 393,
+                        "y": 339,
+                    },{
+                        "cam": 4,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello4.png",
+                        "size": (300,617),
+                        "x": 741,
+                        "y": 245,
+                    },{
+                        "cam": 5,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello3.png",
+                        "size": (600,834),
+                        "x": 599,
+                        "y": 226,
+                    },{
+                        "cam": 4,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello4.png",
+                        "size": (300,617),
+                        "x": 741,
+                        "y": 245,
                     },{
                         "cam": 1,
                         "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello-behind.png",
