@@ -4,7 +4,7 @@ import os
 SAVE_PATH = "./save/save.json"
 
 DEFAULT_SAVE = {
-    "version": "1.0.3.1",
+    "version": "1.0.3.2",
 
     "progress": {
         "stars": 0,
@@ -71,6 +71,12 @@ DEFAULT_SAVE = {
                         "size": (500,695),
                         "x": 393,
                         "y": 339,
+                    },{
+                        "cam": 2,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello5.png",
+                        "size": (1400,1945),
+                        "x": -73,
+                        "y": 189,
                     },
                 ]
             },
