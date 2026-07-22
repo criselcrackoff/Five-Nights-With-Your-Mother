@@ -1,0 +1,130 @@
+import json
+import os
+
+SAVE_PATH = "./save/save.json"
+
+DEFAULT_SAVE = {
+    "version": "1.0.3.2",
+
+    "progress": {
+        "stars": 0,
+        "highscore": 0
+    },
+
+    "challenges": {
+        "challenge_1": False,
+        "challenge_2": False,
+        "challenge_3": False
+    },
+
+    "settings": {
+        "fullscreen": False,
+        "width": 1280,
+        "height": 720
+    },
+
+    "statistics": {
+        "play_time": 0,
+        "total_deaths": 0,
+        "total_wins": 0
+    },
+
+    "animatronics": {
+        "Maurello": {
+                "ai": 5,
+                "ignoremask": True,
+                "jumpscare": [ "./assets/sfx/Furry.mp3" ],
+                "path": [
+                    {
+                        "cam": 3,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello2.png",
+                        "size": (400,556),
+                        "x": 910,
+                        "y": 147,
+                    },{
+                        "cam": 1,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello-behind.png",
+                        "size": (500,695),
+                        "x": 393,
+                        "y": 339,
+                    },{
+                        "cam": 4,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello4.png",
+                        "size": (300,617),
+                        "x": 741,
+                        "y": 245,
+                    },{
+                        "cam": 5,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello3.png",
+                        "size": (600,834),
+                        "x": 599,
+                        "y": 226,
+                    },{
+                        "cam": 4,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello4.png",
+                        "size": (300,617),
+                        "x": 741,
+                        "y": 245,
+                    },{
+                        "cam": 1,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello-behind.png",
+                        "size": (500,695),
+                        "x": 393,
+                        "y": 339,
+                    },{
+                        "cam": 2,
+                        "spritepath":"./assets/sprites/Animatronics/Maurello/Maurello5.png",
+                        "size": (1400,1945),
+                        "x": -73,
+                        "y": 189,
+                    },
+                ]
+            },
+        "Furry": {
+                "ai": 5,
+                "ignoremask": True,
+                "jumpscare": [ "./assets/sfx/Furry.mp3" ],
+                "path": []
+            }
+    }
+}
+
+SAVE = {}
+
+def create_save():
+
+    os.makedirs("save", exist_ok=True)
+
+    if not os.path.exists(SAVE_PATH):
+
+        with open(SAVE_PATH, "w") as f:
+
+            json.dump(DEFAULT_SAVE, f, indent=4)
+def load_save():
+
+    global SAVE
+
+    with open(SAVE_PATH, "r") as f:
+        SAVE = json.load(f)
+def save_game(data):
+
+    with open(SAVE_PATH, "w") as f:
+
+        json.dump(data, f, indent=4)
+def get_fromSave(path):
+    data = SAVE
+    for key in path.split("."):
+        data = data[key]
+    return data
+
+def set_fromSave(path, value):
+
+    data = SAVE
+
+    keys = path.split(".")
+
+    for key in keys[:-1]:
+        data = data[key]
+
+    data[keys[-1]] = value
+
