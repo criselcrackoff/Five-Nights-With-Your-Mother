@@ -13,7 +13,7 @@ class CameraScript(Script):
         self.camera = 1
         
         self.cameranimation = self.game.monitor
-        self.waiting_animation = False
+        self.blipanimation = self.game.get_image("blip")
 
         self.mouse_in_trigger = False
         self.trigger_padding = 20
@@ -37,9 +37,25 @@ class CameraScript(Script):
         # Camera Elements
         #
 
+        self.waiting_blip = False
+        self.waiting_animation = False
         self.map = self.game.get_image("Map")
         self.maurello = self.game.get_image("maurellobg")
         self.animatronics = [self.game.maurello]
+        self.botonescamara = {}
+        for image in self.game.images:
+            if image.get_id() == "Cambutton":
+                self.botonescamara[int(image.get_subid())] = image
+                
+        self.camera_button_sprites = {
+            1: (cam1off, cam1on),
+            2: (cam2off, cam2on),
+            3: (cam3off, cam3on),
+            4: (cam4off, cam4on),
+            5: (cam5off, cam5on),
+        }
+            
+
 
     def event(self, event):
 
@@ -50,10 +66,32 @@ class CameraScript(Script):
             
             if event.key == pygame.K_i:
                 self.camera -= 1
+                self.start_blip()
                 self.show_camera_feed()
             if event.key == pygame.K_o:
                 self.camera += 1
+                self.start_blip()
                 self.show_camera_feed()
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+
+            if not self.open or self.waiting_animation:
+                return
+            
+            ui = self.game.UI_SCALE
+            mouse = event.pos
+
+            for camera_id, boton in self.botonescamara.items():
+
+                rect = pygame.Rect(
+                    int(boton.get_x() * ui),
+                    int(boton.get_y() * ui),
+                    boton.get_surface_width(),
+                    boton.get_surface_height()
+                )
+
+                if rect.collidepoint(mouse):
+                    self.change_camera(camera_id)
+                    break
 
     def update(self, dt):
 
@@ -75,13 +113,19 @@ class CameraScript(Script):
         elif not inside:
             self.mouse_in_trigger = False
 
+        if self.waiting_blip and self.blipanimation.is_finished():
+            self.waiting_blip = False
+            self.blipanimation.set_alpha(0)
+
         if self.waiting_animation and self.cameranimation.is_finished():
 
             if self.open:
                 self.show_camera_feed()
                 self.hide_office_elements()
+                self.start_blip()
             self.waiting_animation = False
             self.cameranimation.set_alpha(0)
+            
         refresh = False
 
         for anim in self.animatronics:
@@ -91,6 +135,12 @@ class CameraScript(Script):
 
         if refresh and self.open:
             self.show_camera_feed()
+
+    def start_blip(self):
+        self.game.mixer.play(Blip,volume=0.2,channel=self.game.CHANNEL_MONITOR)
+        self.waiting_blip = True
+        self.blipanimation.set_alpha(255)
+        self.blipanimation.restart()
 
     def toggle(self):
 
@@ -107,11 +157,7 @@ class CameraScript(Script):
             if mask.open:
                 mask.close_mask()
 
-        self.game.mixer.play(
-            Tablet,
-            volume=0.2,
-            channel=self.game.CHANNEL_SFX
-        )
+        self.game.mixer.play(Tablet,volume=0.2,channel=self.game.CHANNEL_MONITOR)
 
         if self.open:
             self.close_camera()
@@ -139,27 +185,32 @@ class CameraScript(Script):
         self.show_office_elements()
         self.hide_camera_feed()
         self.cameranimation.set_alpha(255)
+        self.blipanimation.set_alpha(0)
         self.cameranimation.play(reverse=True)
 
+    def change_camera(self, new_camera):
+
+        if new_camera == self.camera:
+            return
+
+        # Desactivar botón anterior
+        self.botonescamara[self.camera].change_image(
+            self.camera_button_sprites[self.camera][0]
+        )
+
+        # Activar botón nuevo
+        self.botonescamara[new_camera].change_image(
+            self.camera_button_sprites[new_camera][1]
+        )
+
+        self.camera = new_camera
+
+        self.start_blip()
+        self.show_camera_feed()
+
     def show_camera_feed(self):
-
-        if self.camera == 1:
-            self.camera_feed.change_image(cam1)
-
-        elif self.camera == 2:
-            self.camera_feed.change_image(cam2)
-
-        elif self.camera == 3:
-            self.camera_feed.change_image(cam3)
-
-        elif self.camera == 4:
-            self.camera_feed.change_image(cam4)
-
-        elif self.camera == 5:
-            self.camera_feed.change_image(cam5)
-
-        else:
-            self.camera_feed.change_image(unavailable)
+        self.show_camera_buttons()
+        self.show_camera_bg()
 
         # Ocultar placeholder por defecto
         self.maurello.set_alpha(0)
@@ -189,8 +240,26 @@ class CameraScript(Script):
             self.maurello.set_alpha(255)
 
         self.map.set_alpha(255)
-    def hide_camera_feed(self):
+    def show_camera_bg(self):
+        if self.camera == 1:
+            self.camera_feed.change_image(cam1)
 
+        elif self.camera == 2:
+            self.camera_feed.change_image(cam2)
+
+        elif self.camera == 3:
+            self.camera_feed.change_image(cam3)
+
+        elif self.camera == 4:
+            self.camera_feed.change_image(cam4)
+
+        elif self.camera == 5:
+            self.camera_feed.change_image(cam5)
+
+        else:
+            self.camera_feed.change_image(unavailable)
+    def hide_camera_feed(self):
+        self.hide_camera_buttons()
         self.map.set_alpha(0)
 
         self.maurello.set_alpha(0)
@@ -201,6 +270,15 @@ class CameraScript(Script):
             self.hide_office_elements()
         else:
             self.show_office_elements()
+    def show_camera_buttons(self):
+
+        for boton in self.botonescamara.values():
+            boton.set_alpha(255)
+
+    def hide_camera_buttons(self):
+
+        for boton in self.botonescamara.values():
+            boton.set_alpha(0)
     def show_office_elements(self):
         self.left.set_y(390)
         self.leftbg.set_y(236)

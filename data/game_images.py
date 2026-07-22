@@ -8,6 +8,17 @@ cam5 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Bathroom.png"
 unavailable = "./assets/sprites/Mechanics/Cameras/Camera-bg/Disabled.png"
 maurello_sprite1 = "./assets/sprites/Animatronics/Maurello/Maurello2.png"
 maurello_sprite2 = "./assets/sprites/Animatronics/Maurello/Maurello-behind.png"
+cam1off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H1.png"
+cam1on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H1-Selected.png"
+cam3off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A2.png"
+cam3on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A2-Selected.png"
+cam2off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A3.png"
+cam2on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A3-Selected.png"
+cam4off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A4.png"
+cam4on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A4-Selected.png"
+cam5off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A1.png"
+cam5on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A1-Selected.png"
+
 IMAGES = {
 
     "WARNING": [
@@ -340,12 +351,78 @@ IMAGES = {
             "id":"Cambutton",
             "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H1.png",
             "alpha":0,
-            "x":38,
-            "y":639,
-            "trigger":False,
+            "x":1123,
+            "y":618,
+            "trigger":True,
             "fullscreen":False,
             "subid":"1",
             "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A3.png",
+            "alpha":0,
+            "x":1175,
+            "y":649,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"2",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A2.png",
+            "alpha":0,
+            "x":1173,
+            "y":597,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"3",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A4.png",
+            "alpha":0,
+            "x":1071,
+            "y":552,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"4",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A1.png",
+            "alpha":0,
+            "x":1071,
+            "y":481,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"5",
+            "size":(36,22)
+        },
+
+        {
+            "type":"animation",
+            "id":"blip",
+            "folder":"./assets/animations/Blip",
+            "alpha":0,
+            "trigger":False,
+            "x":0,
+            "y":0,
+            "fullscreen":True,
+            "subid":None,
+            "fps": 30,
+            "loop": False
         },
 
         {
@@ -370,7 +447,7 @@ IMAGES = {
             "trigger":False,
             "fullscreen":False,
             "subid":None
-        },
+        }, 
 
         {
             "type":"image",
