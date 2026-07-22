@@ -71,7 +71,7 @@ class Game:
         # Version
         # -------------------------
 
-        self.VERSION = "1.0.3.1"
+        self.VERSION = "1.0.3.2"
 
         # -------------------------
         # Window
@@ -114,8 +114,9 @@ class Game:
         self.CHANNEL_AMBIENT = 1
         self.CHANNEL_MUSIC = 2
         self.CHANNEL_MASK = 3
-        self.CHANNEL_DOOR = list(range(4, 12))
-        self.CHANNEL_SFX = list(range(13, 28))
+        self.CHANNEL_MONITOR = list(range(4,10))
+        self.CHANNEL_DOOR = list(range(11, 18))
+        self.CHANNEL_SFX = list(range(19, 35))
         self.CHANNEL_VOICE = {}
 
         # -------------------------
