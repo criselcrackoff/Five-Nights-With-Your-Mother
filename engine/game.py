@@ -23,7 +23,7 @@ from states.ingame import ingame_main
 from scripts.power import PowerScript
 from scripts.cameras import CameraScript
 from scripts.mask import MaskScript
-
+from scripts.reset import ResetScript
 
 
 class Game:
@@ -60,8 +60,8 @@ class Game:
         self.BASE_WIDTH = 1280
         self.BASE_HEIGHT = 720
 
-        self.WIDTH = 1920
-        self.HEIGHT = 1080
+        self.WIDTH = 1280
+        self.HEIGHT = 720
 
         self.UI_SCALE = self.HEIGHT / self.BASE_HEIGHT
 
@@ -71,7 +71,7 @@ class Game:
         # Version
         # -------------------------
 
-        self.VERSION = "1.0.3.2"
+        self.VERSION = "1.0.3.3"
 
         # -------------------------
         # Window
@@ -760,6 +760,9 @@ class Game:
                         channel=self.CHANNEL_DOOR
                     )
     def add_script(self, script_class):
+        if self.get_script(script_class) is not None:
+            return
+        
         self.scripts.append(script_class(self))
     
     def get_script(self, script):
@@ -790,8 +793,8 @@ class Game:
         )
 
         self.furry = Animatronic(
-            1,
-            "Maurello",
+            2,
+            "Furry",
             get_fromSave("animatronics.Maurello.ai"),
             get_fromSave("animatronics.Maurello.path")
         )
@@ -1100,6 +1103,8 @@ class Game:
 
         if self.SUBGAMESTATE == "warningscreen":
 
+            self.add_script(ResetScript)
+            
             (
                 self.SUBGAMESTATE,
                 self.MENUSTATE,
