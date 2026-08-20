@@ -263,7 +263,7 @@ IMAGES = {
             "y":340,
             "fullscreen":False,
             "subid":None,
-            "fps": 20,
+            "fps": 25,
             "loop": True,
             "size":(750,384),
         },
@@ -349,7 +349,7 @@ IMAGES = {
         {
             "type":"image",
             "id":"Cambutton",
-            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H1.png",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H1-Selected.png",
             "alpha":0,
             "x":1123,
             "y":618,
@@ -410,7 +410,7 @@ IMAGES = {
             "subid":"5",
             "size":(36,22)
         },
-
+        
         {
             "type":"animation",
             "id":"blip",

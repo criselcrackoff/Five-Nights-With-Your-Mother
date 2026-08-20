@@ -286,7 +286,7 @@ class CameraScript(Script):
         self.desk.set_alpha(255)
         self.leftdoor.set_y(0)
         self.rightdoor.set_y(0)
-        self.maskbar.set_alpha(255)
+        self.maskbar.set_alpha(175)
     def hide_office_elements(self):
         self.left.set_y(990)
         self.leftbg.set_y(990)
