@@ -516,7 +516,20 @@ class Game:
 
         self.SCREEN.blit(time_text, (10, 10))
         self.SCREEN.blit(menu_text, (10, 40))
+        for script in self.scripts:
 
+            if script.__class__.__name__ != "ResetScript":
+                continue
+
+            fade = script.fade_image
+
+            if fade is None:
+                continue
+
+            surface = fade.get_scr().copy()
+            surface.set_alpha(fade.get_alpha())
+
+            self.SCREEN.blit(surface,(0, 0))
         pygame.display.update() 
     def drawIngame(self):
 
@@ -607,7 +620,20 @@ class Game:
             time_text,
             (10, 10)
         )
+        for script in self.scripts:
+        
+            if script.__class__.__name__ != "ResetScript":
+                continue
 
+            fade = script.fade_image
+
+            if fade is None:
+                continue
+
+            surface = fade.get_scr().copy()
+            surface.set_alpha(fade.get_alpha())
+
+            self.SCREEN.blit(surface,(0, 0))
         pygame.display.update()        
     def create_images(self, group):
 
@@ -795,8 +821,8 @@ class Game:
         self.furry = Animatronic(
             2,
             "Furry",
-            get_fromSave("animatronics.Maurello.ai"),
-            get_fromSave("animatronics.Maurello.path")
+            get_fromSave("animatronics.Furry.ai"),
+            get_fromSave("animatronics.Furry.path")
         )
 
         #
@@ -809,7 +835,7 @@ class Game:
 
             "You can get rid of Pou by pressing 'Shift' if he's in a top position.",
 
-            "You can slow down Sonic when the cameras are up, making him unable to jump cams. \nWell... most of the time.",
+            "You can slow down Sonic when the cameras are up, making him unable to \njump cams. Well... most of the time.",
 
             "Bob doesn't like being watched.",
 
