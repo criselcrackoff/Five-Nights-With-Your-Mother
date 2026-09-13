@@ -98,6 +98,54 @@ IMAGES = {
             "subid":"MaurelloAddAi"
         },
 
+        {
+            "type":"image",
+            "id": "CN",
+            "path": "./assets/sprites/CustomNight/UI/Portraits/CustomIndicator.png",
+            "alpha":255,
+            "x":265,
+            "y":200,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "type":"image",
+            "id":"CN",
+            "path":"./assets/sprites/CustomNight/UI/Portraits/Furry_Portrait.png",
+            "alpha":255,
+            "x":275,
+            "y":238,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":"FurryPortrait",
+            "size":(125,125)
+        },
+
+        {
+            "type":"image",
+            "id":"CN",
+            "path":"./assets/sprites/UI/left1.png",
+            "alpha":255,
+            "x":275,
+            "y":368,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"FurryMinusAi"
+        },
+
+        {
+            "type":"image",
+            "id":"CN",
+            "path":"./assets/sprites/UI/right1.png",
+            "alpha":255,
+            "x":366,
+            "y":368,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"FurryAddAi"
+        },
         # ...el resto exactamente igual...
 
         {
@@ -270,7 +318,7 @@ IMAGES = {
 
         {
             "type":"image",
-            "id":"maurellobg",
+            "id":"furrybg",
             "path":"./assets/sprites/CompactOffice/Office.png",
             "alpha":0,
             "x":0,
@@ -280,6 +328,18 @@ IMAGES = {
             "subid":None
         },
 
+        {
+            "type":"image",
+            "id":"maurellobg",
+            "path":"./assets/sprites/CompactOffice/Office.png",
+            "alpha":0,
+            "x":0,
+            "y":0,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":None
+        },
+        
         {
             "type":"image",
             "id":"CameraBar",

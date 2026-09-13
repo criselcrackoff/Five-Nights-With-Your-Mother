@@ -37,7 +37,6 @@ class Game:
         # Save
         # -------------------------
 
-        create_save()
         self.SAVE = load_save()
 
         # -------------------------
@@ -330,15 +329,18 @@ class Game:
 
             surface.set_alpha(text.get_alpha())
 
-            x = int(text.get_x() * self.UI_SCALE)
-            y = int((text.get_y() + scroll_y) * self.UI_SCALE)
+            draw_x = text.get_x()
 
-            if text.get_id() == 111:
+        #
+        #   ENCARGADO DE MOSTRAR INTELIGENCIA DE ANIMATRONICOS
+        #
+            if text.get_id() in (111, 112):
 
                 if int(text.get_text()) > 9:
-                    text.set_x(140)
-                else:
-                    text.set_x(148)
+                    draw_x -= 9
+
+            x = int(draw_x * self.UI_SCALE)
+            y = int((text.get_y() + scroll_y) * self.UI_SCALE)
 
             self.SCREEN.blit(surface, (x, y))
 
@@ -459,20 +461,30 @@ class Game:
             if text.get_subid() in ("layered", "2ndlayered", "Config"):
                 continue
 
-            x = int(text.get_x() * self.UI_SCALE)
+            draw_x = text.get_x()
 
-            if text.get_id() == 111:
+        #
+        #   ENCARGADO DE MOSTRAR INTELIGENCIA DE ANIMATRONICOS (scroll script)
+        #
 
-                y = int((text.get_y() + scroll_y) * self.UI_SCALE)
+            if text.get_id() in (111, 112):
 
                 if int(text.get_text()) > 9:
-                    text.set_x(140)
-                else:
-                    text.set_x(148)
+                    draw_x -= 9
+
+                y = int(
+                    (text.get_y() + scroll_y) *
+                    self.UI_SCALE
+                )
 
             else:
 
-                y = int(text.get_y() * self.UI_SCALE)
+                y = int(
+                    text.get_y() *
+                    self.UI_SCALE
+                )
+
+            x = int(draw_x * self.UI_SCALE)
 
             for line_index, surface in enumerate(text.get_rendered_lines()):
 
@@ -880,6 +892,8 @@ class Game:
             Text(8, "Back", self.H1, "white", 255, True, -1020, 640, "Config"),
             Text(101, str(self.maurello.get_nombre()), self.H3, "white", 255, False, 90 ,202,"layered"),
             Text(111, str(self.maurello.get_ai()), self.H1, "white", 255, False, 148 ,365,"layered"),
+            Text(102, str(self.furry.get_nombre()), self.H3, "white", 255, False, 295 ,202,"layered"),
+            Text(112, str(self.furry.get_ai()), self.H1, "white", 255, False, 323 ,365,"layered"),
         ]
 
         self.LOAD_NIGHT_TEXTS = [
@@ -965,12 +979,16 @@ class Game:
             #
 
             for text in self.texts:
-
-                if text.get_id() == 111:
-
-                    text.set_text(
-                        str(self.maurello.get_ai())
-                    )
+                
+                match text.get_id():
+                    case 111:
+                        text.set_text(
+                            str(self.maurello.get_ai())
+                        )
+                    case 112:
+                        text.set_text(
+                            str(self.furry.get_ai())
+                        )
 
             #
             # Click izquierdo
@@ -1015,18 +1033,23 @@ class Game:
 
                     case 1:
                         self.maurello.set_ai(0)
+                        self.furry.set_ai(0)
 
                     case 2:
                         self.maurello.add_ai(1)
+                        self.furry.add_ai(1)
 
                     case 3:
                         self.maurello.set_ai(5)
+                        self.furry.set_ai(5)
 
                     case 4:
                         self.maurello.set_ai(10)
+                        self.furry.set_ai(10)
 
                     case 5:
                         self.maurello.set_ai(20)
+                        self.furry.set_ai(20)
 
                     case 6:
 
@@ -1098,6 +1121,12 @@ class Game:
 
                 case "MaurelloAddAi":
                     self.maurello.add_ai(1)
+
+                case "FurryMinusAi":
+                    self.furry.minus_ai(1)
+
+                case "FurryAddAi":
+                    self.furry.add_ai(1)
 
     def handle_ingame_click(self):
 
@@ -1248,6 +1277,7 @@ class Game:
         )
 
         self.maurello.update(self.delta_time)
+        self.furry.update(self.delta_time)
 
     def update(self):
 

@@ -41,7 +41,8 @@ class CameraScript(Script):
         self.waiting_animation = False
         self.map = self.game.get_image("Map")
         self.maurello = self.game.get_image("maurellobg")
-        self.animatronics = [self.game.maurello]
+        self.furry = self.game.get_image("furrybg")
+        self.animatronics = [self.game.maurello, self.game.furry]
         self.botonescamara = {}
         for image in self.game.images:
             if image.get_id() == "Cambutton":
@@ -214,30 +215,49 @@ class CameraScript(Script):
 
         # Ocultar placeholder por defecto
         self.maurello.set_alpha(0)
-
+        self.furry.set_alpha(0)
         # Dibujar animatrónicos presentes en esta cámara
         for anim in self.animatronics:
 
             if anim.get_camera() != self.camera:
                 continue
+            match anim.get_nombre():
+                case "Maurello":
+                    self.maurello.change_image(
+                        anim.get_sprite()
+                    )
+                
+                    self.maurello.set_size(
+                        anim.get_size()
+                    )
 
-            self.maurello.change_image(
-                anim.get_sprite()
-            )
+                    self.maurello.set_x(
+                        anim.get_x()
+                    )
 
-            self.maurello.set_size(
-                anim.get_size()
-            )
+                    self.maurello.set_y(
+                        anim.get_y()
+                    )
 
-            self.maurello.set_x(
-                anim.get_x()
-            )
+                    self.maurello.set_alpha(255)
+                case "Furry":
+                    self.furry.change_image(
+                        anim.get_sprite()
+                    )
+                
+                    self.furry.set_size(
+                        anim.get_size()
+                    )
 
-            self.maurello.set_y(
-                anim.get_y()
-            )
+                    self.furry.set_x(
+                        anim.get_x()
+                    )
 
-            self.maurello.set_alpha(255)
+                    self.furry.set_y(
+                        anim.get_y()
+                    )
+
+                    self.furry.set_alpha(255)
 
         self.map.set_alpha(255)
     def show_camera_bg(self):
@@ -263,6 +283,7 @@ class CameraScript(Script):
         self.map.set_alpha(0)
 
         self.maurello.set_alpha(0)
+        self.furry.set_alpha(0)
 
         self.camera_feed.change_image(comoffice)
     def toggle_office_elements(self):
