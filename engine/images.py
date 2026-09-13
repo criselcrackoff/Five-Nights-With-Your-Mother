@@ -108,6 +108,9 @@ class Images:
     def set_subid(self, subid):
         self.__subid = subid
 
+    def set_ifBG(self, istrue):
+        self.__isBG = istrue
+        
     def set_size(self, size):
         self._size = size
         self.__scr = self.scale_surface(self.__scr)
