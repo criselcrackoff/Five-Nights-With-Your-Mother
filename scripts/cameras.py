@@ -54,6 +54,14 @@ class CameraScript(Script):
             3: (cam3off, cam3on),
             4: (cam4off, cam4on),
             5: (cam5off, cam5on),
+            6: (cam6off, cam6on),
+            7: (cam7off, cam7on),
+            8: (cam8off, cam8on),
+            9: (cam9off, cam9on),
+            10: (cam10off, cam10on),
+            11: (cam11off, cam11on),
+            12: (cam12off, cam12on),
+            13: (cam13off, cam13on),
         }
             
 
@@ -261,23 +269,35 @@ class CameraScript(Script):
 
         self.map.set_alpha(255)
     def show_camera_bg(self):
-        if self.camera == 1:
-            self.camera_feed.change_image(cam1)
-
-        elif self.camera == 2:
-            self.camera_feed.change_image(cam2)
-
-        elif self.camera == 3:
-            self.camera_feed.change_image(cam3)
-
-        elif self.camera == 4:
-            self.camera_feed.change_image(cam4)
-
-        elif self.camera == 5:
-            self.camera_feed.change_image(cam5)
-
-        else:
-            self.camera_feed.change_image(unavailable)
+        match self.camera:
+            case 1:
+                self.camera_feed.change_image(cam1)
+            case 2:
+                self.camera_feed.change_image(cam2)
+            case 3:
+                self.camera_feed.change_image(cam3)
+            case 4:
+                self.camera_feed.change_image(cam4)
+            case 5:
+                self.camera_feed.change_image(cam5)
+            case 6:
+                self.camera_feed.change_image(cam6)
+            case 7:
+                self.camera_feed.change_image(cam7)
+            case 8:
+                self.camera_feed.change_image(cam8)
+            case 9:
+                self.camera_feed.change_image(cam9)
+            case 10:
+                self.camera_feed.change_image(cam10)
+            case 11:
+                self.camera_feed.change_image(cam11)
+            case 12:
+                self.camera_feed.change_image(cam12)
+            case 13:
+                self.camera_feed.change_image(cam13)                                                                                                                    
+            case _:
+                self.camera_feed.change_image(unavailable)
     def hide_camera_feed(self):
         self.hide_camera_buttons()
         self.map.set_alpha(0)

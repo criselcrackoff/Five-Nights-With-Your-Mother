@@ -5,6 +5,14 @@ cam2 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Bedroom2.png"
 cam3 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Bedroom.png"
 cam4 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Livingroom.png"
 cam5 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Bathroom.png"
+cam6 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Backyard.png"
+cam7 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Storage.png"
+cam8 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Garage.png"
+cam9 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Door-Side.png"
+cam10 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Second-Hall.png"
+cam11 = "./assets/sprites/Mechanics/Cameras/Camera-bg/AirDuct-CamB1.png"
+cam12 = "./assets/sprites/Mechanics/Cameras/Camera-bg/AirDuct-CamC3.png"
+cam13 = "./assets/sprites/Mechanics/Cameras/Camera-bg/S1.png"
 unavailable = "./assets/sprites/Mechanics/Cameras/Camera-bg/Disabled.png"
 maurello_sprite1 = "./assets/sprites/Animatronics/Maurello/Maurello2.png"
 maurello_sprite2 = "./assets/sprites/Animatronics/Maurello/Maurello-behind.png"
@@ -18,6 +26,22 @@ cam4off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A4.png"
 cam4on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A4-Selected.png"
 cam5off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A1.png"
 cam5on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-A1-Selected.png"
+cam6off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C3.png"
+cam6on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C3-Selected.png"
+cam7off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C2.png"
+cam7on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C2-Selected.png"
+cam8off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C1.png"
+cam8on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C1-Selected.png"
+cam9off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C4.png"
+cam9on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C4-Selected.png"
+cam10off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H2.png"
+cam10on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H2-Selected.png"
+cam11off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B1.png"
+cam11on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B1-Selected.png"
+cam12off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B3.png"
+cam12on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B3-Selected.png"
+cam13off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-S1.png"
+cam13on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-S1-Selected.png"
 
 IMAGES = {
 
@@ -468,6 +492,110 @@ IMAGES = {
             "trigger":True,
             "fullscreen":False,
             "subid":"5",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C3.png",
+            "alpha":0,
+            "x":1160,
+            "y":488,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"6",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C2.png",
+            "alpha":0,
+            "x":1012,
+            "y":474,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"7",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C1.png",
+            "alpha":0,
+            "x":1012,
+            "y":419,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"8",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-C4.png",
+            "alpha":0,
+            "x":1113,
+            "y":652,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"9",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H2.png",
+            "alpha":0,
+            "x":963,
+            "y":537,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"10",
+            "size":(36,22)
+        },                        
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B1.png",
+            "alpha":0,
+            "x":1135,
+            "y":440,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"11",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B3.png",
+            "alpha":0,
+            "x":977,
+            "y":617,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"12",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-S1.png",
+            "alpha":0,
+            "x":1044,
+            "y":596,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"13",
             "size":(36,22)
         },
         
