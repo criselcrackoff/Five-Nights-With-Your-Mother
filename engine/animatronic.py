@@ -66,8 +66,6 @@ class Animatronic:
             self.current_x,
             self.current_y
         )
-    def get_camera(self):
-        return self.current_cam
 
     def get_sprite(self):
         return self.current_sprite
@@ -77,9 +75,6 @@ class Animatronic:
 
     def get_y(self):
         return self.current_y
-
-    def get_size(self):
-        return self.current_size
     
     # -----------------------------------
     # AI
