@@ -100,10 +100,74 @@ DEFAULT_SAVE = {
                 {
                     "cam": 1,
                     "spritepath": "./assets/sprites/Animatronics/Furry/furry_hallway.png",
-                    "size": (90, 184),
+                    "size": [
+                        90,
+                        184
+                    ],
                     "x": 755,
                     "y": 479
-                }
+                },
+                {
+                    "cam": 2,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_bedroom.png",
+                    "size": [
+                        233,
+                        237
+                    ],
+                    "x": 656,
+                    "y": 30
+                },
+		        {
+                    "cam": 3,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_peeking.png",
+                    "size": [
+                        590,
+                        720
+                    ],
+                    "x": 0,
+                    "y": 0
+                },
+                {
+		            "cam": 6,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_backyard.png",
+                    "size": [
+                        242,
+                        268
+                    ],
+                    "x": 207,
+                    "y": 299
+                },
+                {
+		            "cam": 11,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_insidevent_1.png",
+                    "size": [
+                        1280,
+                        720
+                    ],
+                    "x": 0,
+                    "y": 0
+                },
+                {
+		            "cam": 5,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_bath.png",
+                    "size": [
+                        196,
+                        324
+                    ],
+                    "x": 195,
+                    "y": 141
+                },
+		        {
+		            "cam": 4,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_living.png",
+                    "size": [
+                        189,
+                        223
+                    ],
+                    "x": 412,
+                    "y": 497
+                },
+
             ]
         }
     }
