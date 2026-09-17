@@ -229,7 +229,7 @@ class CameraScript(Script):
 
             if anim.get_camera() != self.camera:
                 continue
-            match anim.get_nombre():
+            match anim.get_name():
                 case "Maurello":
                     self.maurello.change_image(
                         anim.get_sprite()

@@ -70,7 +70,7 @@ class Game:
         # Version
         # -------------------------
 
-        self.VERSION = "1.0.3.3"
+        self.VERSION = "1.0.3.4"
 
         # -------------------------
         # Window
@@ -827,14 +827,18 @@ class Game:
             1,
             "Maurello",
             get_fromSave("animatronics.Maurello.ai"),
-            get_fromSave("animatronics.Maurello.path")
+            get_fromSave("animatronics.Maurello.jumpscare"),
+            get_fromSave("animatronics.Maurello.path"),
+            get_fromSave("animatronics.Maurello.ignoremask")
         )
 
         self.furry = Animatronic(
             2,
             "Furry",
             get_fromSave("animatronics.Furry.ai"),
-            get_fromSave("animatronics.Furry.path")
+            get_fromSave("animatronics.Furry.jumpscare"),
+            get_fromSave("animatronics.Furry.path"),
+            get_fromSave("animatronics.Furry.ignoremask")
         )
 
         #
@@ -890,9 +894,9 @@ class Game:
             Text(6, "START",self.H1,"white",255,True,1110,665),
             Text(7, "Settings",self.H2,"white",255,True,1075,370),
             Text(8, "Back", self.H1, "white", 255, True, -1020, 640, "Config"),
-            Text(101, str(self.maurello.get_nombre()), self.H3, "white", 255, False, 90 ,202,"layered"),
+            Text(101, str(self.maurello.get_name()), self.H3, "white", 255, False, 90 ,202,"layered"),
             Text(111, str(self.maurello.get_ai()), self.H1, "white", 255, False, 148 ,365,"layered"),
-            Text(102, str(self.furry.get_nombre()), self.H3, "white", 255, False, 295 ,202,"layered"),
+            Text(102, str(self.furry.get_name()), self.H3, "white", 255, False, 295 ,202,"layered"),
             Text(112, str(self.furry.get_ai()), self.H1, "white", 255, False, 323 ,365,"layered"),
         ]
 
