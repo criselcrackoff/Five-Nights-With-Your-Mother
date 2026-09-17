@@ -2,10 +2,12 @@ import json
 import os
 import copy
 
+
 SAVE_PATH = "./save/save.json"
 
+
 DEFAULT_SAVE = {
-    "version": "1.0.3.3",
+    "version": "1.0.3.4",
 
     "progress": {
         "stars": 0,
@@ -35,7 +37,8 @@ DEFAULT_SAVE = {
             "ai": 5,
             "ignoremask": True,
             "jumpscare": [
-                "./assets/sfx/Furry.mp3"
+                "./assets/sfx/Furry.mp3",
+                "./assets/animations/Jumpscares/test/"
             ],
             "path": [
                 {
@@ -117,7 +120,7 @@ DEFAULT_SAVE = {
                     "x": 656,
                     "y": 30
                 },
-		        {
+                {
                     "cam": 3,
                     "spritepath": "./assets/sprites/Animatronics/Furry/furry_peeking.png",
                     "size": [
@@ -128,7 +131,7 @@ DEFAULT_SAVE = {
                     "y": 0
                 },
                 {
-		            "cam": 6,
+                    "cam": 6,
                     "spritepath": "./assets/sprites/Animatronics/Furry/furry_backyard.png",
                     "size": [
                         242,
@@ -138,7 +141,7 @@ DEFAULT_SAVE = {
                     "y": 299
                 },
                 {
-		            "cam": 11,
+                    "cam": 11,
                     "spritepath": "./assets/sprites/Animatronics/Furry/furry_insidevent_1.png",
                     "size": [
                         1280,
@@ -148,7 +151,7 @@ DEFAULT_SAVE = {
                     "y": 0
                 },
                 {
-		            "cam": 5,
+                    "cam": 5,
                     "spritepath": "./assets/sprites/Animatronics/Furry/furry_bath.png",
                     "size": [
                         196,
@@ -157,8 +160,8 @@ DEFAULT_SAVE = {
                     "x": 195,
                     "y": 141
                 },
-		        {
-		            "cam": 4,
+                {
+                    "cam": 4,
                     "spritepath": "./assets/sprites/Animatronics/Furry/furry_living.png",
                     "size": [
                         189,
@@ -166,8 +169,7 @@ DEFAULT_SAVE = {
                     ],
                     "x": 412,
                     "y": 497
-                },
-
+                }
             ]
         }
     }
@@ -178,18 +180,23 @@ SAVE = {}
 
 
 # =========================================================
-# MERGE DE SAVES
+# MERGE NORMAL
 # =========================================================
 
 def merge_save(save, default):
     """
-    Agrega al save existente cualquier dato que exista
-    en DEFAULT_SAVE pero que el save no tenga.
+    Merge normal del save.
 
-    Los datos existentes del usuario SIEMPRE tienen prioridad.
+    Los datos que ya existen en el save del usuario
+    tienen prioridad.
+
+    Solamente se agregan datos nuevos que no existían.
     """
 
-    if not isinstance(save, dict) or not isinstance(default, dict):
+    if not isinstance(save, dict):
+        return save
+
+    if not isinstance(default, dict):
         return save
 
     for key, default_value in default.items():
@@ -217,6 +224,29 @@ def merge_save(save, default):
                 save[key],
                 default_value
             )
+
+    return save
+
+
+# =========================================================
+# MERGE DE ANIMATRÓNICOS
+# =========================================================
+
+def merge_animatronics(save):
+    """
+    Sincroniza completamente la categoría
+    de animatrónicos con DEFAULT_SAVE.
+
+    A diferencia del merge normal, aquí NO se
+    conservan los valores antiguos.
+
+    Los animatrónicos son datos internos del juego,
+    por lo que DEFAULT_SAVE siempre tiene prioridad.
+    """
+
+    save["animatronics"] = copy.deepcopy(
+        DEFAULT_SAVE["animatronics"]
+    )
 
     return save
 
@@ -309,12 +339,21 @@ def create_save():
 
 
     # =====================================================
-    # MERGE
+    # MERGE NORMAL
     # =====================================================
 
     merge_save(
         old_save,
         DEFAULT_SAVE
+    )
+
+
+    # =====================================================
+    # SINCRONIZAR ANIMATRÓNICOS
+    # =====================================================
+
+    merge_animatronics(
+        old_save
     )
 
 
@@ -362,17 +401,30 @@ def create_save():
 # =========================================================
 
 def load_save():
+
     global SAVE
 
     create_save()
 
     try:
-        with open(SAVE_PATH, "r", encoding="utf-8") as f:
+
+        with open(
+            SAVE_PATH,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
             SAVE = json.load(f)
 
     except (json.JSONDecodeError, OSError) as error:
-        print(f"[SAVE] Could not load save: {error}")
-        SAVE = copy.deepcopy(DEFAULT_SAVE)
+
+        print(
+            f"[SAVE] Could not load save: {error}"
+        )
+
+        SAVE = copy.deepcopy(
+            DEFAULT_SAVE
+        )
 
     return SAVE
 
