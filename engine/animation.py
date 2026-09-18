@@ -25,24 +25,20 @@ class Animation(Images):
 
         self.frames = []
 
-        files = sorted(os.listdir(folder))
+        self.animation_folder = folder
+        self.animation_size = size
 
-        for file in files:
+        # ==========================================================
+        # CACHE DE ANIMACIONES
+        # ==========================================================
+        #
+        # Guarda los frames ya cargados para evitar volver a leer
+        # los PNG del disco durante el gameplay.
+        #
 
-            if not file.endswith(".png"):
-                continue
+        self.frame_cache = {}
 
-            frame = pygame.image.load(
-                os.path.join(folder, file)
-            ).convert_alpha()
-
-            if size is not None:
-                frame = pygame.transform.smoothscale(
-                    frame,
-                    size
-                )
-
-            self.frames.append(frame)
+        self.load_frames(folder)
 
         if len(self.frames) == 0:
             raise Exception(
@@ -63,6 +59,10 @@ class Animation(Images):
             sub_id=subid
         )
 
+        # ==========================================================
+        # ESTADO
+        # ==========================================================
+
         self.current_frame = 0
         self.animation_speed = fps
         self.loop = loop
@@ -70,74 +70,222 @@ class Animation(Images):
         self.timer = 0
         self.reverse = False
 
+    # ==========================================================
+    # CARGAR FRAMES
+    # ==========================================================
+
+    def load_frames(self, folder):
+
+        # ==========================================================
+        # USAR CACHE
+        # ==========================================================
+
+        if folder in self.frame_cache:
+
+            self.frames = self.frame_cache[folder]
+
+            return
+
+        frames = []
+
+        try:
+
+            files = sorted(
+                os.listdir(folder)
+            )
+
+        except Exception as error:
+
+            print(
+                f"[Animation] Error leyendo carpeta "
+                f"'{folder}': {error}"
+            )
+
+            self.frames = []
+
+            return
+
+        # ==========================================================
+        # CARGAR PNG
+        # ==========================================================
+
+        for file in files:
+
+            if not file.lower().endswith(".png"):
+                continue
+
+            path = os.path.join(
+                folder,
+                file
+            )
+
+            try:
+
+                frame = pygame.image.load(
+                    path
+                ).convert_alpha()
+
+            except Exception as error:
+
+                print(
+                    f"[Animation] Error cargando "
+                    f"'{path}': {error}"
+                )
+
+                continue
+
+            # ======================================================
+            # ESCALA
+            # ======================================================
+
+            if self.animation_size is not None:
+
+                frame = pygame.transform.smoothscale(
+                    frame,
+                    self.animation_size
+                )
+
+            frames.append(frame)
+
+        # ==========================================================
+        # GUARDAR CACHE
+        # ==========================================================
+
+        self.frame_cache[folder] = frames
+
+        self.frames = frames
+
+    # ==========================================================
+    # UPDATE
+    # ==========================================================
+
     def update(self, delta_time):
 
         if not self.playing:
             return
 
+        if len(self.frames) == 0:
+            return
+
         frame_time = 1 / self.animation_speed
+
         self.timer += delta_time
 
         while self.timer >= frame_time:
 
             self.timer -= frame_time
 
-            if self.reverse:
+            # ======================================================
+            # REPRODUCCIÓN NORMAL
+            # ======================================================
 
-                self.current_frame -= 1
-
-                if self.current_frame < 0:
-
-                    if self.loop:
-                        self.current_frame = len(self.frames) - 1
-                    else:
-                        self.current_frame = 0
-                        self.playing = False
-                        break
-
-            else:
+            if not self.reverse:
 
                 self.current_frame += 1
 
                 if self.current_frame >= len(self.frames):
 
                     if self.loop:
+
                         self.current_frame = 0
+
                     else:
-                        self.current_frame = len(self.frames) - 1
+
+                        self.current_frame = (
+                            len(self.frames) - 1
+                        )
+
                         self.playing = False
+
+                        break
+
+            # ======================================================
+            # REPRODUCCIÓN INVERSA
+            # ======================================================
+
+            else:
+
+                self.current_frame -= 1
+
+                if self.current_frame < 0:
+
+                    if self.loop:
+
+                        self.current_frame = (
+                            len(self.frames) - 1
+                        )
+
+                    else:
+
+                        self.current_frame = 0
+                        self.playing = False
+
                         break
 
         self.change_surface(
             self.frames[self.current_frame]
         )
 
+    # ==========================================================
+    # PLAY
+    # ==========================================================
+
     def play(self, reverse=False):
+
+        if len(self.frames) == 0:
+            return
 
         self.reverse = reverse
         self.playing = True
         self.timer = 0
 
         if reverse:
-            self.current_frame = len(self.frames) - 1
+
+            self.current_frame = (
+                len(self.frames) - 1
+            )
+
         else:
+
             self.current_frame = 0
 
         self.change_surface(
             self.frames[self.current_frame]
         )
 
+    # ==========================================================
+    # STOP
+    # ==========================================================
+
     def stop(self):
+
         self.playing = False
 
+    # ==========================================================
+    # RESTART
+    # ==========================================================
+
     def restart(self):
-        self.play(reverse=self.reverse)
+
+        self.play(
+            reverse=self.reverse
+        )
+
+    # ==========================================================
+    # FRAME
+    # ==========================================================
 
     def set_frame(self, frame):
 
+        if len(self.frames) == 0:
+            return
+
         frame = max(
             0,
-            min(frame, len(self.frames) - 1)
+            min(
+                frame,
+                len(self.frames) - 1
+            )
         )
 
         self.current_frame = frame
@@ -147,12 +295,19 @@ class Animation(Images):
         )
 
     def get_frame(self):
+
         return self.current_frame
 
     def get_total_frames(self):
+
         return len(self.frames)
 
+    # ==========================================================
+    # ESTADO
+    # ==========================================================
+
     def is_playing(self):
+
         return self.playing
 
     def is_finished(self):
@@ -161,6 +316,7 @@ class Animation(Images):
             return False
 
         if self.reverse:
+
             return (
                 not self.playing
                 and self.current_frame == 0
@@ -168,8 +324,75 @@ class Animation(Images):
 
         return (
             not self.playing
-            and self.current_frame == len(self.frames) - 1
+            and
+            self.current_frame ==
+            len(self.frames) - 1
         )
 
+    # ==========================================================
+    # FPS
+    # ==========================================================
+
     def set_fps(self, fps):
+
         self.animation_speed = fps
+
+    # ==========================================================
+    # CAMBIAR CARPETA
+    # ==========================================================
+
+    def change_folder(self, folder):
+
+        # ==========================================================
+        # MISMA CARPETA
+        # ==========================================================
+        #
+        # Si ya estamos utilizando esta carpeta, NO volvemos a
+        # cargar absolutamente nada del disco.
+        #
+
+        if folder == self.animation_folder:
+
+            if len(self.frames) == 0:
+                self.load_frames(folder)
+
+            self.current_frame = 0
+            self.timer = 0
+            self.reverse = False
+            self.playing = False
+
+            if len(self.frames) > 0:
+
+                self.change_surface(
+                    self.frames[0]
+                )
+
+            return
+
+        # ==========================================================
+        # NUEVA CARPETA
+        # ==========================================================
+
+        self.animation_folder = folder
+
+        self.load_frames(folder)
+
+        if len(self.frames) == 0:
+
+            raise Exception(
+                f"No animation frames found "
+                f"in '{folder}'."
+            )
+
+        # ==========================================================
+        # REINICIAR ESTADO
+        # ==========================================================
+
+        self.current_frame = 0
+        self.timer = 0
+        self.reverse = False
+        self.playing = False
+
+        self.change_surface(
+            self.frames[0]
+        )
