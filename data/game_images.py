@@ -390,10 +390,24 @@ IMAGES = {
 
         {
             "type":"animation",
+            "id":"jumpscare",
+            "folder":"./assets/animations/Jumpscares/Maurello",
+            "alpha":0,
+            "trigger":False,
+            "x":0,
+            "y":0,
+            "fullscreen":True,
+            "subid":None,
+            "fps": 25,
+            "loop": False
+        },
+
+        {
+            "type":"animation",
             "id":"Monitor",
             "folder":"./assets/animations/CameraPanel",
             "alpha":255,
-            "trigger":False,
+            "trigger":False,    
             "x":0,
             "y":0,
             "fullscreen":False,
@@ -649,7 +663,19 @@ IMAGES = {
             "subid":None
         }
 
+    ],
+
+    "GAMEOVER": [
+        {
+            "type":"image",
+            "id": "0",
+            "path": "./assets/sprites/GameOver.png",
+            "alpha": 255,
+            "x": 0,
+            "y": 0,
+            "trigger": False,
+            "fullscreen": True,
+            "subid": None
+        }
     ]
-
-
 }

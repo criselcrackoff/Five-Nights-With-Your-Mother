@@ -19,10 +19,12 @@ from states.warning_screen import warning_main
 from states.custom_night import custom_night_main
 from states.load_night import load_night_main
 from states.ingame import ingame_main
+from states.gameover import gameover_main
 
 from scripts.power import PowerScript
 from scripts.cameras import CameraScript
 from scripts.mask import MaskScript
+from scripts.attackscript import AttackScript
 from scripts.reset import ResetScript
 
 
@@ -70,7 +72,7 @@ class Game:
         # Version
         # -------------------------
 
-        self.VERSION = "1.0.3.4"
+        self.VERSION = "1.0.3.5"
 
         # -------------------------
         # Window
@@ -244,7 +246,7 @@ class Game:
         # Night Variables
         # -------------------------
 
-        self.hour = -4
+        self.hour = 0
         self.night_type = 1
         self.officetype = "Compact"
 
@@ -916,6 +918,10 @@ class Game:
             Text(1, "Usage", self.P, "white", 255, False, 37, 658)
         ]
 
+        self.GAMEOVER_TEXTS = [
+            Text(0,"Game Over", self.H1, "white", 255, False, 0, 650)
+        ]
+
         #
         # Images
         #
@@ -934,6 +940,10 @@ class Game:
 
         self.INGAME_IMG = self.create_images(
             "INGAME_COMPACTOFFICE"
+        )
+
+        self.GAMEOVER_IMG = self.create_images(
+            "GAMEOVER"
         )
 
         #
@@ -1234,51 +1244,12 @@ class Game:
         elif self.SUBGAMESTATE == "LoadNight": 
             load_night_main(self)
 
+        elif self.SUBGAMESTATE == "GameOver": 
+            self.add_script(ResetScript)
+            gameover_main(self)
+
     def update_ingame(self):
-
-        (
-
-            self.player_x,
-
-            self.night_timer,
-
-            self.hour,
-
-            self.INGAME_FADE_ALPHA
-
-        ) = ingame_main(
-
-            texts=self.texts,
-
-            img=self.images,
-
-            player=self.player,
-
-            player_x=self.player_x,
-
-            mouse_x=self.mouse_x,
-
-            delta_time=self.delta_time,
-
-            night_timer=self.night_timer,
-
-            hour=self.hour,
-
-            fade_alpha=self.INGAME_FADE_ALPHA,
-
-            fade_speed=self.INGAME_FADE_SPEED,
-
-            left_border=self.LEFT_BORDER,
-
-            right_border=self.RIGHT_BORDER,
-
-            width=self.WIDTH,
-
-            max_speed=self.MAX_SPEED,
-
-            discord=self.discord
-
-        )
+        ingame_main(self)
 
         self.maurello.update(self.delta_time)
         self.furry.update(self.delta_time)
