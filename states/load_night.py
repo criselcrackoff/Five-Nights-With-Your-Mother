@@ -4,6 +4,7 @@ from scripts.power import PowerScript
 from scripts.cameras import CameraScript
 from scripts.mask import MaskScript
 from scripts.doors_key import Doors
+from scripts.attackscript import AttackScript
 def load_night_main(game):
 
     game.LOAD_NIGHT_TIMER += game.delta_time
@@ -99,5 +100,6 @@ def load_night_main(game):
         game.add_script(CameraScript)
         game.add_script(MaskScript)
         game.add_script(Doors)
+        game.add_script(AttackScript)
         game.power = game.get_script(PowerScript)
         game.GAMESTATE = "ingame"

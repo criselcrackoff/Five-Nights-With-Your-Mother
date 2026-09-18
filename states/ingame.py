@@ -1,35 +1,24 @@
 from engine.richpresense import RichPresense
+from scripts.reset import ResetScript
 
-def ingame_main(
-    texts,
-    img,
-    player,
-    player_x,
-    mouse_x,
-    delta_time,
-    night_timer,
-    hour,
-    fade_alpha,
-    fade_speed,
-    left_border,
-    right_border,
-    width,
-    max_speed,
-    discord
-):
+def ingame_main(game):
 
-    discord.update_rpc(
-        state=f"No Challenge ({texts[0].get_text()} {texts[1].get_text()})",
+    game.discord.update_rpc(
+        state=f"No Challenge ({game.texts[0].get_text()} {game.texts[1].get_text()})",
         details="In a Night"
     )
 
-    night_timer += delta_time
+    game.night_timer += game.delta_time
 
-    if 0 <= night_timer <= 1:
+    # ==========================================================
+    # HORA
+    # ==========================================================
 
-        for text in texts:
+    if 0 <= game.night_timer <= 1:
 
-            if hour == -4:
+        for text in game.texts:
+
+            if game.hour == -4:
 
                 if text.get_subid() == "Period":
                     text.set_text("PM")
@@ -38,7 +27,7 @@ def ingame_main(
                     text.set_text("8")
                     text.set_x(1170)
 
-            elif hour == -2:
+            elif game.hour == -2:
 
                 if text.get_subid() == "Period":
                     text.set_text("PM")
@@ -47,7 +36,7 @@ def ingame_main(
                     text.set_text("10")
                     text.set_x(1150)
 
-            elif hour == 0:
+            elif game.hour == 0:
 
                 if text.get_subid() == "Period":
                     text.set_text("AM")
@@ -55,66 +44,112 @@ def ingame_main(
                 if text.get_subid() == "Hour":
                     text.set_text("12")
 
-            elif hour == 1:
+            elif game.hour == 1:
 
                 if text.get_subid() == "Hour":
                     text.set_text("1")
                     text.set_x(1170)
 
-    if night_timer > 75:
+    # ==========================================================
+    # AVANZAR HORA
+    # ==========================================================
 
-        hour += 1
+    if game.night_timer > 75:
 
-        texts[0].set_text(
-            str(int(texts[0].get_text()) + 1)
+        game.hour += 1
+        match game.hour:
+            case 0:
+                game.texts[0].set_text("12")
+            case 1:
+                game.texts[0].set_text("1")
+            case _:
+                game.texts[0].set_text(
+                    str(int(game.texts[0].get_text()) + 1)
+                )
+
+        game.night_timer = 0
+
+    # ==========================================================
+    # FADE IN
+    # ==========================================================
+
+    if game.INGAME_FADE_ALPHA > 0:
+
+        game.INGAME_FADE_ALPHA -= (
+            game.INGAME_FADE_SPEED *
+            game.delta_time
         )
 
-        night_timer = 0
+        if game.INGAME_FADE_ALPHA < 0:
+            game.INGAME_FADE_ALPHA = 0
 
-    if fade_alpha > 0:
+        for image in game.images:
 
-        fade_alpha -= fade_speed * delta_time
-
-        if fade_alpha < 0:
-            fade_alpha = 0
-        for image in img:
             if image.get_id() == "fadein":
-                image.set_alpha(fade_alpha)
 
-    if mouse_x < left_border:
+                image.set_alpha(
+                    game.INGAME_FADE_ALPHA
+                )
 
-        distance = left_border - mouse_x
+    # ==========================================================
+    # MOVIMIENTO DEL JUGADOR
+    # ==========================================================
 
-        speed = (
-            distance / left_border
-        ) * max_speed
+    if game.mouse_x < game.LEFT_BORDER:
 
-        player_x -= speed * delta_time
-
-    elif mouse_x > right_border:
-
-        distance = mouse_x - right_border
+        distance = (
+            game.LEFT_BORDER -
+            game.mouse_x
+        )
 
         speed = (
             distance /
-            (width - right_border)
-        ) * max_speed
+            game.LEFT_BORDER
+        ) * game.MAX_SPEED
 
-        player_x += speed * delta_time
+        game.player_x -= (
+            speed *
+            game.delta_time
+        )
 
-    player_x = max(
+    elif game.mouse_x > game.RIGHT_BORDER:
+
+        distance = (
+            game.mouse_x -
+            game.RIGHT_BORDER
+        )
+
+        speed = (
+            distance /
+            (game.WIDTH - game.RIGHT_BORDER)
+        ) * game.MAX_SPEED
+
+        game.player_x += (
+            speed *
+            game.delta_time
+        )
+
+    # ==========================================================
+    # LIMITAR POSICIÓN
+    # ==========================================================
+
+    game.player_x = max(
         0,
         min(
-            player_x,
-            width - player.width
+            game.player_x,
+            game.WIDTH - game.player.width
         )
     )
 
-    player.x = int(player_x)
+    game.player.x = int(
+        game.player_x
+    )
 
-    return (
-        player_x,
-        night_timer,
-        hour,
-        fade_alpha
-    )   
+    # ==========================================================
+    # Completar Noche
+    # ==========================================================
+
+    match game.night_type:
+        case 1:
+            if game.hour == 6:
+                pass
