@@ -7,7 +7,7 @@ SAVE_PATH = "./save/save.json"
 
 
 DEFAULT_SAVE = {
-    "version": "1.0.3.4",
+    "version": "1.0.3.5",
 
     "progress": {
         "stars": 0,
@@ -38,7 +38,7 @@ DEFAULT_SAVE = {
             "ignoremask": True,
             "jumpscare": [
                 "./assets/sfx/Furry.mp3",
-                "./assets/animations/Jumpscares/test/"
+                "./assets/animations/Jumpscares/Maurello"
             ],
             "path": [
                 {
@@ -89,7 +89,13 @@ DEFAULT_SAVE = {
                     "size": (1400, 1945),
                     "x": -73,
                     "y": 189
-                }
+                },
+                {
+                    "cam": "door_right"
+		        },
+		        {
+                    "cam": "office"
+		        }
             ]
         },
 
