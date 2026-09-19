@@ -326,6 +326,18 @@ IMAGES = {
         },
 
         {
+            "type":"image",
+            "id":"stare_behind_desk",
+            "path": "./assets/sprites/onepixel.png",
+            "alpha": 0,
+            "x":736,
+            "y":390,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":"off"
+        },
+
+        {
             "type":"animation",
             "id":"Desk",
             "folder":"./assets/animations/DeskFan",
@@ -338,6 +350,18 @@ IMAGES = {
             "fps": 25,
             "loop": True,
             "size":(750,384),
+        },
+
+        {
+            "type":"image",
+            "id":"stare_infront_desk",
+            "path": "./assets/sprites/onepixel.png",
+            "alpha": 0,
+            "x":736,
+            "y":390,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":"off"
         },
 
         {
@@ -361,6 +385,18 @@ IMAGES = {
             "y":0,
             "trigger":False,
             "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "type":"image",
+            "id":"blackout",
+            "path":"./assets/sprites/onepixel.png",
+            "alpha":0,
+            "x":0,
+            "y":0,
+            "trigger":False,
+            "fullscreen":True,
             "subid":None
         },
         
