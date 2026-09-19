@@ -843,6 +843,15 @@ class Game:
             get_fromSave("animatronics.Furry.ignoremask")
         )
 
+        self.teddy = Animatronic(
+            3,
+            "Teddy",
+            get_fromSave("animatronics.Teddy.ai"),
+            get_fromSave("animatronics.Teddy.jumpscare"),
+            get_fromSave("animatronics.Teddy.path"),
+            get_fromSave("animatronics.Teddy.ignoremask")
+        )
+
         #
         # Tips
         #

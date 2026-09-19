@@ -177,6 +177,50 @@ DEFAULT_SAVE = {
                     "y": 497
                 }
             ]
+        },
+        
+        "Teddy": {
+            "ai": 20,
+            "ignoremask": False,
+            "jumpscare": [
+                "./assets/sfx/Furry.mp3",
+                "./assets/animations/Jumpscares/Teddy"
+            ],
+            "path": [
+                {
+                    "cam": 10,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_hallway.png",
+                    "size": [
+                        90,
+                        184
+                    ],
+                    "x": 755,
+                    "y": 479
+                },
+                {
+                    "cam": 11,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_hallway.png",
+                    "size": [
+                        90,
+                        184
+                    ],
+                    "x": 755,
+                    "y": 479
+                },
+                {
+                    "cam": "wait_room"      
+                },
+                {
+                    "cam": "office",
+                    "office_sprite": "./assets/sprites/Animatronics/Teddy/teddy_in_office.png",
+                    "size": [
+                        254,
+                        246
+                    ],
+                    "x": 473,
+                    "y": 474
+                }
+            ]
         }
     }
 }
