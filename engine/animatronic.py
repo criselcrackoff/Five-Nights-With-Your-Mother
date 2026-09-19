@@ -37,7 +37,6 @@ class Animatronic:
         # ==========================================================
 
         self.ignoremask = ignoremask
-
         self.jumpscare = jumpscare
 
         # ==========================================================
@@ -45,7 +44,6 @@ class Animatronic:
         # ==========================================================
 
         self.path = path
-
         self.path_index = 0
 
         # ==========================================================
@@ -55,9 +53,7 @@ class Animatronic:
         self.needs_refresh = False
 
         self.attacking = False
-
         self.blackout = False
-
         self.jumpscaring = False
 
         # ==========================================================
@@ -69,6 +65,9 @@ class Animatronic:
         self.current_size = None
         self.current_x = None
         self.current_y = None
+
+        # Sprite utilizado cuando está en la oficina
+        self.office_sprite = None
 
         self.update_current_node()
 
@@ -110,8 +109,17 @@ class Animatronic:
     def get_sprite(self):
         return self.current_sprite
 
+    def get_office_sprite(self):
+        return self.office_sprite
+
     def get_size(self):
         return self.current_size
+
+    def get_position(self):
+        return (
+            self.current_x,
+            self.current_y
+        )
 
     def get_x(self):
         return self.current_x
@@ -120,7 +128,7 @@ class Animatronic:
         return self.current_y
 
     # ==========================================================
-    # ESTADO DE ATAQUE
+    # ESTADO
     # ==========================================================
 
     def is_attacking(self):
@@ -156,7 +164,7 @@ class Animatronic:
         )
 
     # ==========================================================
-    # MOVIMIENTO
+    # TIMER
     # ==========================================================
 
     def get_move_interval(self):
@@ -166,8 +174,27 @@ class Animatronic:
 
         self.move_interval = seconds
 
+    def get_move_timer(self):
+        return self.move_timer
+
+    def set_move_timer(self, seconds):
+
+        self.move_timer = max(
+            0.0,
+            seconds
+        )
+
+    def reset_move_timer(self):
+
+        self.move_timer = 0.0
+
+    # ==========================================================
+    # UPDATE
+    # ==========================================================
+
     def update(self, delta_time):
 
+        # No puede seguir moviéndose durante un ataque
         if self.attacking:
             return
 
@@ -175,9 +202,13 @@ class Animatronic:
 
         if self.move_timer >= self.move_interval:
 
-            self.move_timer = 0
+            self.move_timer = 0.0
 
             self.roll_movement_opportunity()
+
+    # ==========================================================
+    # OPORTUNIDAD DE MOVIMIENTO
+    # ==========================================================
 
     def roll_movement_opportunity(self):
 
@@ -198,6 +229,10 @@ class Animatronic:
 
             self.needs_refresh = True
 
+    # ==========================================================
+    # MOVIMIENTO
+    # ==========================================================
+
     def move(self):
 
         if not self.path:
@@ -216,7 +251,7 @@ class Animatronic:
         )
 
         # ======================================================
-        # COMPROBAR SI LLEGÓ A OFFICE
+        # OFFICE
         # ======================================================
 
         if self.is_office():
@@ -236,9 +271,17 @@ class Animatronic:
             self.path_index
         ]
 
+        # ------------------------------------------------------
+        # CAM
+        # ------------------------------------------------------
+
         self.current_cam = node.get(
             "cam"
         )
+
+        # ------------------------------------------------------
+        # DATOS DE CÁMARA
+        # ------------------------------------------------------
 
         self.current_sprite = node.get(
             "spritepath"
@@ -256,8 +299,16 @@ class Animatronic:
             "y"
         )
 
+        # ------------------------------------------------------
+        # SPRITE DE OFICINA
+        # ------------------------------------------------------
+
+        self.office_sprite = node.get(
+            "office_sprite"
+        )
+
     # ==========================================================
-    # TIPO DE NODO
+    # TIPOS DE NODO
     # ==========================================================
 
     def is_camera(self):
@@ -274,6 +325,10 @@ class Animatronic:
             "door_right"
         )
 
+    def is_wait_room(self):
+
+        return self.current_cam == "wait_room"
+
     def is_office(self):
 
         return self.current_cam == "office"
@@ -283,10 +338,6 @@ class Animatronic:
     # ==========================================================
 
     def attack(self):
-
-        # ======================================================
-        # EVITAR ATAQUES REPETIDOS
-        # ======================================================
 
         if self.attacking:
             return None
@@ -305,14 +356,8 @@ class Animatronic:
         )
 
         # ======================================================
-        # IGNOREMASK = TRUE
+        # IGNOREMASK
         # ======================================================
-        #
-        # Este animatrónico ignora la máscara.
-        #
-        # Resultado:
-        # JUMPSCARE INMEDIATO.
-        #
 
         if self.ignoremask:
 
@@ -331,13 +376,8 @@ class Animatronic:
             }
 
         # ======================================================
-        # IGNOREMASK = FALSE
+        # BLACKOUT
         # ======================================================
-        #
-        # El animatrónico puede ser detenido con máscara.
-        #
-        # Entra en blackout.
-        #
 
         self.blackout = True
 
@@ -390,14 +430,13 @@ class Animatronic:
         )
 
         self.attacking = False
-
         self.blackout = False
         self.jumpscaring = False
 
         self.reset_position()
 
     # ==========================================================
-    # COMPLETAR JUMPSCARE
+    # TERMINAR JUMPSCARE
     # ==========================================================
 
     def finish_jumpscare(self):
@@ -405,15 +444,15 @@ class Animatronic:
         if not self.jumpscaring:
             return
 
+        self.jumpscaring = False
+
         print(
             f"[{self.__nombre}] "
             f"jumpscare terminado."
         )
 
-        self.jumpscaring = False
-
     # ==========================================================
-    # RESET DE POSICIÓN
+    # RESET
     # ==========================================================
 
     def reset_position(self):
@@ -426,6 +465,8 @@ class Animatronic:
         self.attacking = False
         self.blackout = False
         self.jumpscaring = False
+
+        self.move_timer = 0.0
 
         self.update_current_node()
 
