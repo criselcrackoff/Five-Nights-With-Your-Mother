@@ -9,7 +9,7 @@ def gameover_main(game):
 
     game.timer += game.delta_time
 
-    if game.timer >= 10 or game.mouse_clicked:
+    if game.timer >= 6 or game.mouse_clicked:
         reset = game.get_script(ResetScript)
 
         if reset:
