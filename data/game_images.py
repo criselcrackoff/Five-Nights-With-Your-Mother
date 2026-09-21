@@ -13,6 +13,8 @@ cam10 = "./assets/sprites/Mechanics/Cameras/Camera-bg/Second-Hall.png"
 cam11 = "./assets/sprites/Mechanics/Cameras/Camera-bg/AirDuct-CamB1.png"
 cam12 = "./assets/sprites/Mechanics/Cameras/Camera-bg/AirDuct-CamC3.png"
 cam13 = "./assets/sprites/Mechanics/Cameras/Camera-bg/S1.png"
+cam14 = "./assets/sprites/Mechanics/Cameras/Camera-bg/AirDuct.png"
+cam15 = "./assets/sprites/Mechanics/Cameras/Camera-bg/AirDuct-CamB2.png"
 unavailable = "./assets/sprites/Mechanics/Cameras/Camera-bg/Disabled.png"
 cam1off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H1.png"
 cam1on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-H1-Selected.png"
@@ -40,6 +42,10 @@ cam12off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B3.png"
 cam12on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B3-Selected.png"
 cam13off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-S1.png"
 cam13on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-S1-Selected.png"
+cam14off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B4.png"
+cam14on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B4-Selected.png"
+cam15off = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B2.png"
+cam15on = "./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B2-Selected.png"
 
 
 
@@ -72,6 +78,10 @@ IMAGES = {
             "fullscreen": True,
             "subid": None
         },
+
+# ==========================================================
+# Maurello Custom Night Portrait
+# ==========================================================
 
         {
             "type":"image",
@@ -122,6 +132,10 @@ IMAGES = {
             "subid":"MaurelloAddAi"
         },
 
+# ==========================================================
+# Furry Custom Night Portrait
+# ==========================================================
+
         {
             "type":"image",
             "id": "CN",
@@ -170,6 +184,60 @@ IMAGES = {
             "fullscreen":False,
             "subid":"FurryAddAi"
         },
+
+# ==========================================================
+# Teddy Custom Night Portrait
+# ==========================================================
+
+        {
+            "type":"image",
+            "id": "CN",
+            "path": "./assets/sprites/CustomNight/UI/Portraits/CustomIndicator.png",
+            "alpha":255,
+            "x":440,
+            "y":200,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "type":"image",
+            "id":"CN",
+            "path":"./assets/sprites/CustomNight/UI/Portraits/Teddy_Portrait.png",
+            "alpha":255,
+            "x":450,
+            "y":238,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":"TeddyPortrait",
+            "size":(125,125)
+        },
+
+        {
+            "type":"image",
+            "id":"CN",
+            "path":"./assets/sprites/UI/left1.png",
+            "alpha":255,
+            "x":450,
+            "y":368,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"TeddyMinusAi"
+        },
+
+        {
+            "type":"image",
+            "id":"CN",
+            "path":"./assets/sprites/UI/right1.png",
+            "alpha":255,
+            "x":541,
+            "y":368,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"TeddyAddAi"
+        },
+
         # ...el resto exactamente igual...
 
         {
@@ -367,6 +435,18 @@ IMAGES = {
         {
             "type":"image",
             "id":"furrybg",
+            "path":"./assets/sprites/CompactOffice/Office.png",
+            "alpha":0,
+            "x":0,
+            "y":0,
+            "trigger":False,
+            "fullscreen":False,
+            "subid":None
+        },
+
+        {
+            "type":"image",
+            "id":"teddybg",
             "path":"./assets/sprites/CompactOffice/Office.png",
             "alpha":0,
             "x":0,
@@ -646,6 +726,32 @@ IMAGES = {
             "trigger":True,
             "fullscreen":False,
             "subid":"13",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B4.png",
+            "alpha":0,
+            "x":977,
+            "y":658,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"14",
+            "size":(36,22)
+        },
+
+        {
+            "type":"image",
+            "id":"Cambutton",
+            "path":"./assets/sprites/Mechanics/Cameras/Buttons/Cam-Button-B2.png",
+            "alpha":0,
+            "x":932,
+            "y":590,
+            "trigger":True,
+            "fullscreen":False,
+            "subid":"15",
             "size":(36,22)
         },
         
