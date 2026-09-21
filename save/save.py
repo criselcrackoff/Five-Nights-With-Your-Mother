@@ -91,6 +91,13 @@ DEFAULT_SAVE = {
                     "y": 189
                 },
                 {
+                    "cam": 9,
+                    "spritepath": "./assets/sprites/Animatronics/Maurello/Maurello5.png",
+                    "size": (800, 1112),
+                    "x": 480,
+                    "y": 140
+                },
+                {
                     "cam": "door_right"
 		        },
 		        {
@@ -103,7 +110,8 @@ DEFAULT_SAVE = {
             "ai": 5,
             "ignoremask": True,
             "jumpscare": [
-                "./assets/sfx/Furry.mp3"
+                "./assets/sfx/Furry.mp3",
+                "./assets/animations/Jumpscares/Furry"
             ],
             "path": [
                 {
@@ -175,12 +183,38 @@ DEFAULT_SAVE = {
                     ],
                     "x": 412,
                     "y": 497
+                },
+                {
+                    "cam": 12,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_insidevent_2.png",
+                    "size": [
+                        979,
+                        286
+                    ],
+                    "x": 0,
+                    "y": 434
+                },
+                {
+                    "cam": 13,
+                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_s1.png",
+                    "size": [
+                        312,
+                        265
+                    ],
+                    "x": 0,
+                    "y": 0
+                },    
+                {
+                    "cam": "door_left"
+                },
+                {
+                    "cam": "office"
                 }
             ]
         },
         
         "Teddy": {
-            "ai": 20,
+            "ai": 5,
             "ignoremask": False,
             "jumpscare": [
                 "./assets/sfx/Furry.mp3",
@@ -189,24 +223,54 @@ DEFAULT_SAVE = {
             "path": [
                 {
                     "cam": 10,
-                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_hallway.png",
+                    "spritepath": "./assets/sprites/Animatronics/Teddy/teddy_hallway.png",
                     "size": [
-                        90,
-                        184
+                        100,
+                        142
                     ],
-                    "x": 755,
-                    "y": 479
+                    "x": 378,
+                    "y": 401
                 },
                 {
-                    "cam": 11,
-                    "spritepath": "./assets/sprites/Animatronics/Furry/furry_hallway.png",
+                    "cam": 12,
+                    "spritepath": "./assets/sprites/Animatronics/Teddy/teddy_ventilation.png",
                     "size": [
-                        90,
-                        184
+                        150,
+                        210
                     ],
-                    "x": 755,
-                    "y": 479
+                    "x": 747,
+                    "y": 324
                 },
+                {
+                    "cam": 4,
+                    "spritepath": "./assets/sprites/Animatronics/Teddy/teddy_livingroom.png",
+                    "size": [
+                        140,
+                        240
+                    ],
+                    "x": 611,
+                    "y": 485
+                },
+                {
+                    "cam": 1,
+                    "spritepath": "./assets/sprites/Animatronics/Teddy/teddy_hallway_2.png",
+                    "size": [
+                        100,
+                        142
+                    ],
+                    "x": 439,
+                    "y": 389
+                },
+                {
+                    "cam": 1,
+                    "spritepath": "./assets/sprites/Animatronics/Teddy/teddy_hallway_2.png",
+                    "size": [
+                        100,
+                        142
+                    ],
+                    "x": 439,
+                    "y": 389
+                },                                                                
                 {
                     "cam": "wait_room"      
                 },

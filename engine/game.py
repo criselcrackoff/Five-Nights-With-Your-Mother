@@ -336,7 +336,7 @@ class Game:
         #
         #   ENCARGADO DE MOSTRAR INTELIGENCIA DE ANIMATRONICOS
         #
-            if text.get_id() in (111, 112):
+            if text.get_id() in (111, 112, 113):
 
                 if int(text.get_text()) > 9:
                     draw_x -= 9
@@ -469,7 +469,7 @@ class Game:
         #   ENCARGADO DE MOSTRAR INTELIGENCIA DE ANIMATRONICOS (scroll script)
         #
 
-            if text.get_id() in (111, 112):
+            if text.get_id() in (111, 112, 113):
 
                 if int(text.get_text()) > 9:
                     draw_x -= 9
@@ -909,6 +909,8 @@ class Game:
             Text(111, str(self.maurello.get_ai()), self.H1, "white", 255, False, 148 ,365,"layered"),
             Text(102, str(self.furry.get_name()), self.H3, "white", 255, False, 295 ,202,"layered"),
             Text(112, str(self.furry.get_ai()), self.H1, "white", 255, False, 323 ,365,"layered"),
+            Text(103, str(self.teddy.get_name()), self.H3, "white", 255, False, 470 ,202,"layered"),
+            Text(113, str(self.teddy.get_ai()), self.H1, "white", 255, False, 497 ,365,"layered"),
         ]
 
         self.LOAD_NIGHT_TEXTS = [
@@ -928,7 +930,7 @@ class Game:
         ]
 
         self.GAMEOVER_TEXTS = [
-            Text(0,"Game Over", self.H1, "white", 255, False, 0, 650)
+            Text(0,"Game Over", self.H1, "white", 255, False, 20, 660)
         ]
 
         #
@@ -1012,6 +1014,10 @@ class Game:
                         text.set_text(
                             str(self.furry.get_ai())
                         )
+                    case 113:
+                        text.set_text(
+                            str(self.teddy.get_ai())
+                        )                        
 
             #
             # Click izquierdo
@@ -1057,22 +1063,27 @@ class Game:
                     case 1:
                         self.maurello.set_ai(0)
                         self.furry.set_ai(0)
+                        self.teddy.set_ai(0)
 
                     case 2:
                         self.maurello.add_ai(1)
                         self.furry.add_ai(1)
+                        self.teddy.add_ai(1)
 
                     case 3:
                         self.maurello.set_ai(5)
                         self.furry.set_ai(5)
+                        self.teddy.set_ai(5)
 
                     case 4:
                         self.maurello.set_ai(10)
                         self.furry.set_ai(10)
+                        self.teddy.set_ai(10)
 
                     case 5:
                         self.maurello.set_ai(20)
                         self.furry.set_ai(20)
+                        self.teddy.set_ai(20)
 
                     case 6:
 
@@ -1150,6 +1161,12 @@ class Game:
 
                 case "FurryAddAi":
                     self.furry.add_ai(1)
+
+                case "TeddyMinusAi":
+                    self.teddy.minus_ai(1)
+
+                case "TeddyAddAi":
+                    self.teddy.add_ai(1)                
 
     def handle_ingame_click(self):
 
@@ -1262,6 +1279,7 @@ class Game:
 
         self.maurello.update(self.delta_time)
         self.furry.update(self.delta_time)
+        self.teddy.update(self.delta_time)
 
     def update(self):
 

@@ -42,7 +42,8 @@ class CameraScript(Script):
         self.map = self.game.get_image("Map")
         self.maurello = self.game.get_image("maurellobg")
         self.furry = self.game.get_image("furrybg")
-        self.animatronics = [self.game.maurello, self.game.furry]
+        self.teddy = self.game.get_image("teddybg")
+        self.animatronics = [self.game.maurello, self.game.furry, self.game.teddy]
         self.botonescamara = {}
         for image in self.game.images:
             if image.get_id() == "Cambutton":
@@ -62,6 +63,8 @@ class CameraScript(Script):
             11: (cam11off, cam11on),
             12: (cam12off, cam12on),
             13: (cam13off, cam13on),
+            14: (cam14off, cam14on),
+            15: (cam15off, cam15on),            
         }
             
 
@@ -224,6 +227,7 @@ class CameraScript(Script):
         # Ocultar placeholder por defecto
         self.maurello.set_alpha(0)
         self.furry.set_alpha(0)
+        self.teddy.set_alpha(0)
         # Dibujar animatrónicos presentes en esta cámara
         for anim in self.animatronics:
 
@@ -267,6 +271,25 @@ class CameraScript(Script):
 
                     self.furry.set_alpha(255)
 
+                case "Teddy":
+                    self.teddy.change_image(
+                        anim.get_sprite()
+                    )
+                
+                    self.teddy.set_size(
+                        anim.get_size()
+                    )
+
+                    self.teddy.set_x(
+                        anim.get_x()
+                    )
+
+                    self.teddy.set_y(
+                        anim.get_y()
+                    )
+
+                    self.teddy.set_alpha(255)
+
         self.map.set_alpha(255)
     def show_camera_bg(self):
         match self.camera:
@@ -295,7 +318,11 @@ class CameraScript(Script):
             case 12:
                 self.camera_feed.change_image(cam12)
             case 13:
-                self.camera_feed.change_image(cam13)                                                                                                                    
+                self.camera_feed.change_image(cam13)
+            case 14:
+                self.camera_feed.change_image(cam14)
+            case 15:
+                self.camera_feed.change_image(cam15)                                                                                                                  
             case _:
                 self.camera_feed.change_image(unavailable)
     def hide_camera_feed(self):
@@ -304,6 +331,7 @@ class CameraScript(Script):
 
         self.maurello.set_alpha(0)
         self.furry.set_alpha(0)
+        self.teddy.set_alpha(0)
 
         self.camera_feed.change_image(comoffice)
     def toggle_office_elements(self):
