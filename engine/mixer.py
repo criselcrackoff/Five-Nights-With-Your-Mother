@@ -119,10 +119,23 @@ class MixerMusic:
         except pygame.error:
             pass
 
-    def stop_all(self):
+    def stop_all(
+        self,
+        fade_ms: int = 0
+    ):
 
-        if self.enabled:
-            pygame.mixer.stop()
+        if not self.enabled:
+            return
+
+        try:
+
+            if fade_ms > 0:
+                pygame.mixer.fadeout(fade_ms)
+            else:
+                pygame.mixer.stop()
+
+        except pygame.error:
+            pass
 
     def set_volume(
         self,
