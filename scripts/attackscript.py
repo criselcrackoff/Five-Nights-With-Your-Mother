@@ -34,7 +34,7 @@ class AttackScript(Script):
         # ESPERA ANTES DE INICIAR ANIMACIÓN
         # ----------------------------------------------------------
 
-        self.jumpscare_start_delay = 1.0
+        self.jumpscare_start_delay = 0.0
         self.jumpscare_start_timer = 0.0
         self.jumpscare_animation_started = False
         self.jumpscare_has_animation = False
@@ -96,12 +96,24 @@ class AttackScript(Script):
         self.blackout_fade_result = None
 
         # ----------------------------------------------------------
-        # FADE OUT
+        # FADE DEL BLACKOUT
         # ----------------------------------------------------------
 
         self.blackout_fade = False
         self.blackout_fade_timer = 0.0
+
+        # Velocidad del negro.
         self.blackout_fade_duration = 3.5
+
+        # ----------------------------------------------------------
+        # FADE DEL ANIMATRÓNICO
+        # ----------------------------------------------------------
+        #
+        # El sprite desaparece mucho más rápido que el blackout.
+        #
+
+        self.stare_fade_timer = 0.0
+        self.stare_fade_duration = 0.45
 
         # ==========================================================
         # IMÁGENES
@@ -124,6 +136,19 @@ class AttackScript(Script):
             self.normal_intervals[
                 animatronic.get_id()
             ] = animatronic.get_move_interval()
+
+        # ==========================================================
+        # ESTADO DE CÁMARA AL LLEGAR A LA PUERTA
+        # ==========================================================
+        #
+        # Guarda si la cámara estaba abierta ANTES de que el
+        # animatrónico llegara a la puerta.
+        #
+        # True  = el jugador ya estaba usando la cámara.
+        # False = el jugador abrió la cámara después de que llegó.
+        #
+
+        self.door_camera_preexisting = {}
 
         # ==========================================================
         # ANIMATRÓNICO QUE DEBE RECIBIR EL BOOST
@@ -162,6 +187,24 @@ class AttackScript(Script):
             self.stare_infront.set_alpha(0)
 
     # ==============================================================
+    # OCULTAR SPRITES DE OFICINA
+    # ==============================================================
+
+    def hide_office_stares(self):
+
+        if self.stare_behind is not None:
+
+            self.stare_behind.set_alpha(
+                0
+            )
+
+        if self.stare_infront is not None:
+
+            self.stare_infront.set_alpha(
+                0
+            )
+
+    # ==============================================================
     # UPDATE
     # ==============================================================
 
@@ -190,6 +233,14 @@ class AttackScript(Script):
             else:
 
                 self.update_blackout(dt)
+
+            # ------------------------------------------------------
+            # Si la cámara está abierta, el sprite NO debe verse.
+            # ------------------------------------------------------
+
+            if self.game.ismonitoropen:
+
+                self.hide_office_stares()
 
             return
 
@@ -329,11 +380,21 @@ class AttackScript(Script):
     # PUERTAS
     # ==============================================================
 
+        # ==============================================================
+    # PUERTAS
+    # ==============================================================
+
     def process_door(self, animatronic):
+
+        animatronic_id = animatronic.get_id()
 
         # ==========================================================
         # DURANTE BLACKOUT
         # ==========================================================
+        #
+        # Mientras ocurre un blackout, los animatrónicos que
+        # ignoran máscara esperan con un timer fijo de 4 segundos.
+        #
 
         if self.blackout_active:
 
@@ -354,6 +415,37 @@ class AttackScript(Script):
             return
 
         # ==========================================================
+        # REGISTRAR CÓMO ESTABA LA CÁMARA AL LLEGAR
+        # ==========================================================
+        #
+        # Este bloque solamente se ejecuta la primera vez que
+        # procesamos al animatrónico estando en la puerta.
+        #
+        # Por lo tanto, el estado de la cámara aquí representa
+        # cómo estaba ANTES/DURANTE su llegada a la puerta.
+        #
+
+        if animatronic_id not in self.door_camera_preexisting:
+
+            self.door_camera_preexisting[
+                animatronic_id
+            ] = self.game.ismonitoropen
+
+            print(
+                f"[ATTACK] "
+                f"{animatronic.get_name()} "
+                f"llegó a puerta. "
+                f"Cámara previa: "
+                f"{self.game.ismonitoropen}"
+            )
+
+        camera_was_open_before = (
+            self.door_camera_preexisting[
+                animatronic_id
+            ]
+        )
+
+        # ==========================================================
         # PUERTA IZQUIERDA
         # ==========================================================
 
@@ -369,11 +461,12 @@ class AttackScript(Script):
 
                 animatronic.reset_position()
 
-                return
+                self.door_camera_preexisting.pop(
+                    animatronic_id,
+                    None
+                )
 
-            animatronic.set_move_interval(
-                self.get_normal_interval(animatronic) * 3
-            )
+                return
 
         # ==========================================================
         # PUERTA DERECHA
@@ -391,12 +484,102 @@ class AttackScript(Script):
 
                 animatronic.reset_position()
 
+                self.door_camera_preexisting.pop(
+                    animatronic_id,
+                    None
+                )
+
                 return
 
+        # ==========================================================
+        # CÁMARA ACTUAL
+        # ==========================================================
+
+        camera_open = self.game.ismonitoropen
+
+        # ==========================================================
+        # CÁMARA YA ESTABA ABIERTA ANTES DE LLEGAR
+        # ==========================================================
+        #
+        # Si el jugador ya estaba usando la cámara cuando el
+        # animatrónico llegó:
+        #
+        #     intervalo = normal * 3
+        #
+        # Abrir/cerrar la cámara después no produce el "castigo"
+        # de intervalo original mientras el flag siga activo.
+        #
+
+        if camera_was_open_before:
+
             animatronic.set_move_interval(
-                self.get_normal_interval(animatronic) * 3
+                self.get_normal_interval(
+                    animatronic
+                ) * 3
             )
 
+            # ------------------------------------------------------
+            # SI EL JUGADOR DEJÓ DE USAR LA CÁMARA
+            # ------------------------------------------------------
+            #
+            # Se elimina el flag.
+            #
+            # En el siguiente ciclo el animatrónico será tratado
+            # como uno que ya no tiene protección por cámara previa.
+            #
+
+            if not camera_open:
+
+                print(
+                    f"[ATTACK] "
+                    f"{animatronic.get_name()} "
+                    "-> cámara previa cerrada, "
+                    "eliminando flag."
+                )
+
+                self.door_camera_preexisting.pop(
+                    animatronic_id,
+                    None
+                )
+
+            return
+
+        # ==========================================================
+        # CÁMARA NO ESTABA ABIERTA ANTES
+        # ==========================================================
+        #
+        # Si el jugador NO tenía la cámara abierta cuando el
+        # animatrónico llegó:
+        #
+        # - Cámara cerrada -> intervalo * 3
+        # - Cámara abierta después -> intervalo original
+        #
+        # Esto hace que abrir la cámara DESPUÉS de que el
+        # animatrónico llegue a la puerta sea un castigo.
+        #
+
+        if camera_open:
+
+            animatronic.set_move_interval(
+                self.get_normal_interval(
+                    animatronic
+                )
+            )
+
+            print(
+                f"[ATTACK] "
+                f"{animatronic.get_name()} "
+                "-> cámara abierta después de llegar, "
+                "intervalo original."
+            )
+
+        else:
+
+            animatronic.set_move_interval(
+                self.get_normal_interval(
+                    animatronic
+                ) * 3
+            )
     # ==============================================================
     # INTERVALO NORMAL
     # ==============================================================
@@ -450,6 +633,7 @@ class AttackScript(Script):
 
         self.blackout_fade = False
         self.blackout_fade_timer = 0.0
+        self.stare_fade_timer = 0.0
 
         self.blackout_fade_result = None
 
@@ -525,32 +709,6 @@ class AttackScript(Script):
             camera.hide_camera_feed()
             camera.show_office_elements()
 
-        # ==========================================================
-        # CERRAR MÁSCARA
-        # ==========================================================
-
-        mask = self.game.get_script(
-            "MaskScript"
-        )
-
-        if mask is not None:
-
-            if mask.open:
-
-                mask.close_mask()
-
-            mask.open = False
-
-            self.game.ismaskopen = False
-
-            mask.waiting_animation = False
-
-            if self.game.mask is not None:
-
-                self.game.mask.set_alpha(
-                    0
-                )
-
     # ==============================================================
     # UPDATE BLACKOUT
     # ==============================================================
@@ -596,10 +754,6 @@ class AttackScript(Script):
 
         else:
 
-            # ======================================================
-            # DEADLINE SUPERADO
-            # ======================================================
-
             if not self.blackout_masked:
 
                 if not self.blackout_mask_failed:
@@ -610,10 +764,6 @@ class AttackScript(Script):
                         "[ATTACK] "
                         "Tiempo de máscara agotado."
                     )
-
-            # ======================================================
-            # LA MÁSCARA FUE QUITADA
-            # ======================================================
 
             if (
                 self.blackout_masked
@@ -689,10 +839,6 @@ class AttackScript(Script):
 
         time = self.blackout_timer
 
-        # ==========================================================
-        # FASE 1
-        # ==========================================================
-
         if time < self.blackout_initial_duration:
 
             self.blackout_visible = True
@@ -700,10 +846,6 @@ class AttackScript(Script):
             self.set_blackout_visibility()
 
             return
-
-        # ==========================================================
-        # FASE 2
-        # ==========================================================
 
         rapid_end = (
             self.blackout_initial_duration
@@ -719,10 +861,6 @@ class AttackScript(Script):
 
             return
 
-        # ==========================================================
-        # FASE 3
-        # ==========================================================
-
         sparse_end = (
             rapid_end
             +
@@ -736,10 +874,6 @@ class AttackScript(Script):
             )
 
             return
-
-        # ==========================================================
-        # FASE 4
-        # ==========================================================
 
         self.blackout_visible = True
 
@@ -778,8 +912,8 @@ class AttackScript(Script):
 
             self.blackout_image.set_alpha(
                 random.randint(
-                    0,
-                    50
+                    50,
+                    100
                 )
             )
 
@@ -789,19 +923,7 @@ class AttackScript(Script):
 
     def show_office_stare(self, animatronic):
 
-        # Ocultar ambos
-
-        if self.stare_behind is not None:
-
-            self.stare_behind.set_alpha(
-                0
-            )
-
-        if self.stare_infront is not None:
-
-            self.stare_infront.set_alpha(
-                0
-            )
+        self.hide_office_stares()
 
         sprite = animatronic.get_office_sprite()
 
@@ -814,10 +936,6 @@ class AttackScript(Script):
             )
 
             return
-
-        # ==========================================================
-        # POSICIÓN
-        # ==========================================================
 
         if animatronic.get_name() == "Teddy":
 
@@ -849,9 +967,21 @@ class AttackScript(Script):
                 animatronic.get_y()
             )
 
-            image.set_alpha(
-                255
-            )
+            # ------------------------------------------------------
+            # Si la cámara está abierta, nunca mostrarlo.
+            # ------------------------------------------------------
+
+            if self.game.ismonitoropen:
+
+                image.set_alpha(
+                    0
+                )
+
+            else:
+
+                image.set_alpha(
+                    255
+                )
 
         except Exception as error:
 
@@ -872,10 +1002,11 @@ class AttackScript(Script):
 
         self.blackout_fade = True
         self.blackout_fade_timer = 0.0
+        self.stare_fade_timer = 0.0
 
         print(
             "[ATTACK] "
-            "Iniciando fade out del blackout."
+            "Iniciando fade out."
         )
 
     # ==============================================================
@@ -884,75 +1015,114 @@ class AttackScript(Script):
 
     def update_blackout_fade(self, dt):
 
+        # ==========================================================
+        # TIMER BLACKOUT
+        # ==========================================================
+
         self.blackout_fade_timer += dt
 
-        progress = (
+        # ==========================================================
+        # TIMER SPRITE
+        # ==========================================================
+
+        self.stare_fade_timer += dt
+
+        # ==========================================================
+        # PROGRESO BLACKOUT
+        # ==========================================================
+
+        blackout_progress = (
             self.blackout_fade_timer
             /
             self.blackout_fade_duration
         )
 
-        progress = max(
+        blackout_progress = max(
             0.0,
             min(
-                progress,
+                blackout_progress,
                 1.0
             )
         )
 
         # ==========================================================
-        # FADE 255 -> 0
+        # PROGRESO SPRITE
         # ==========================================================
 
-        alpha = int(
-            255
-            *
-            (1.0 - progress)
+        stare_progress = (
+            self.stare_fade_timer
+            /
+            self.stare_fade_duration
+        )
+
+        stare_progress = max(
+            0.0,
+            min(
+                stare_progress,
+                1.0
+            )
         )
 
         # ==========================================================
-        # BLACKOUT
+        # ALPHA BLACKOUT
         # ==========================================================
+
+        blackout_alpha = int(
+            255
+            *
+            (1.0 - blackout_progress)
+        )
 
         if self.blackout_image is not None:
 
             self.blackout_image.set_alpha(
-                alpha
+                blackout_alpha
             )
 
         # ==========================================================
-        # STARE
+        # ALPHA ANIMATRÓNICO
         # ==========================================================
         #
-        # IMPORTANTE:
+        # El sprite desaparece independientemente del blackout.
         #
-        # Antes solamente hacíamos fade del blackout.
-        # Ahora el sprite del animatrónico también desaparece.
-        #
+
+        stare_alpha = int(
+            255
+            *
+            (1.0 - stare_progress)
+        )
 
         if self.stare_behind is not None:
 
             self.stare_behind.set_alpha(
-                alpha
+                stare_alpha
             )
 
         if self.stare_infront is not None:
 
             self.stare_infront.set_alpha(
-                alpha
+                stare_alpha
             )
 
         # ==========================================================
-        # FADE TERMINADO
+        # FADE DEL SPRITE TERMINADO
         # ==========================================================
 
-        if progress >= 1.0:
+        if stare_progress >= 1.0:
+
+            self.hide_office_stares()
+
+        # ==========================================================
+        # FADE DEL BLACKOUT TERMINADO
+        # ==========================================================
+
+        if blackout_progress >= 1.0:
 
             result = self.blackout_fade_result
             animatronic = self.blackout_animatronic
 
             # ------------------------------------------------------
-            # Asegurar que TODO quede transparente
+            # ASEGURAR TRANSPARENCIA
             # ------------------------------------------------------
 
             if self.blackout_image is not None:
@@ -961,17 +1131,7 @@ class AttackScript(Script):
                     0
                 )
 
-            if self.stare_behind is not None:
-
-                self.stare_behind.set_alpha(
-                    0
-                )
-
-            if self.stare_infront is not None:
-
-                self.stare_infront.set_alpha(
-                    0
-                )
+            self.hide_office_stares()
 
             # ------------------------------------------------------
             # BLACKOUT EVITADO
@@ -1025,17 +1185,7 @@ class AttackScript(Script):
         # OCULTAR SPRITES
         # ==========================================================
 
-        if self.stare_behind is not None:
-
-            self.stare_behind.set_alpha(
-                0
-            )
-
-        if self.stare_infront is not None:
-
-            self.stare_infront.set_alpha(
-                0
-            )
+        self.hide_office_stares()
 
         # ==========================================================
         # LIMPIAR ESTADO
@@ -1053,6 +1203,7 @@ class AttackScript(Script):
 
         self.blackout_fade = False
         self.blackout_fade_timer = 0.0
+        self.stare_fade_timer = 0.0
 
         self.blackout_fade_result = None
 
@@ -1068,25 +1219,13 @@ class AttackScript(Script):
                 "blackout evitado."
             )
 
-            # ------------------------------------------------------
-            # REINICIAR POSICIÓN
-            # ------------------------------------------------------
-
             animatronic.reset_position()
-
-            # ------------------------------------------------------
-            # RESTAURAR INTERVALO NORMAL
-            # ------------------------------------------------------
 
             animatronic.set_move_interval(
                 self.get_normal_interval(
                     animatronic
                 )
             )
-
-            # ------------------------------------------------------
-            # BOOST DE 1 SEGUNDO
-            # ------------------------------------------------------
 
             animatronic.set_move_timer(
                 1.0
@@ -1133,6 +1272,12 @@ class AttackScript(Script):
             )
 
         # ==========================================================
+        # OCULTAR SPRITES DE OFICINA
+        # ==========================================================
+
+        self.hide_office_stares()
+
+        # ==========================================================
         # OBTENER IMAGEN
         # ==========================================================
 
@@ -1153,18 +1298,6 @@ class AttackScript(Script):
             if mask.open:
 
                 mask.close_mask()
-
-            mask.open = False
-
-            self.game.ismaskopen = False
-
-            mask.waiting_animation = False
-
-            if self.game.mask is not None:
-
-                self.game.mask.set_alpha(
-                    0
-                )
 
         # ==========================================================
         # CÁMARA
@@ -1246,14 +1379,6 @@ class AttackScript(Script):
                     animation_folder
                 )
 
-                # --------------------------------------------------
-                # DETENER ANIMACIÓN
-                # --------------------------------------------------
-                #
-                # El frame 0 queda visible durante
-                # jumpscare_start_delay.
-                #
-
                 self.jumpscare_image.stop()
 
                 self.jumpscare_image.set_frame(
@@ -1299,13 +1424,6 @@ class AttackScript(Script):
 
         else:
 
-            # ======================================================
-            # AUDIO ONLY
-            # ======================================================
-            #
-            # Teddy actualmente solamente tiene sonido.
-            #
-
             self.jumpscare_has_animation = False
 
             if self.jumpscare_image is not None:
@@ -1339,15 +1457,6 @@ class AttackScript(Script):
         # ==========================================================
         # ESPERA INICIAL
         # ==========================================================
-        #
-        # El frame 0 permanece quieto durante 1 segundo.
-        #
-        # IMPORTANTE:
-        #
-        # No debemos interpretar "playing = False" como que
-        # terminó el jumpscare, porque nosotros mismos lo
-        # detenemos durante esta espera.
-        #
 
         if not self.jumpscare_animation_started:
 
@@ -1415,10 +1524,6 @@ class AttackScript(Script):
 
                     return
 
-            # ======================================================
-            # ANIMACIÓN TERMINADA
-            # ======================================================
-
             self.jumpscare_finished = True
             self.gameover_timer = 0.0
 
@@ -1461,8 +1566,7 @@ class AttackScript(Script):
         self.game.texts = self.game.GAMEOVER_TEXTS
         self.game.images = self.game.GAMEOVER_IMG
 
-        self.game.mixer.stop(
-            self.game.CHANNEL_AMBIENT,
+        self.game.mixer.stop_all(
             250
         )
 
@@ -1512,23 +1616,15 @@ class AttackScript(Script):
 
         self.blackout_fade = False
         self.blackout_fade_timer = 0.0
+        self.stare_fade_timer = 0.0
 
         self.blackout_fade_result = None
 
+        self.door_camera_preexisting.clear()
         if self.blackout_image is not None:
 
             self.blackout_image.set_alpha(
                 0
             )
 
-        if self.stare_behind is not None:
-
-            self.stare_behind.set_alpha(
-                0
-            )
-
-        if self.stare_infront is not None:
-
-            self.stare_infront.set_alpha(
-                0
-            )
+        self.hide_office_stares()
