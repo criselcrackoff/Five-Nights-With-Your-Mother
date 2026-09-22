@@ -765,7 +765,7 @@ IMAGES = {
             "y":0,
             "fullscreen":True,
             "subid":None,
-            "fps": 30,
+            "fps": 40,
             "loop": False
         },
 
