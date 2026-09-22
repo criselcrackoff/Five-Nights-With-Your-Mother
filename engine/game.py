@@ -1242,31 +1242,12 @@ class Game:
 
             self.menu_start_time = time.time()
 
-            (
-                self.CUSTOM_NIGHT_SCROLL,
-                self.SETTINGS_SCROLL,
-                self.SETTINGS_STATE
-
-            ) = custom_night_main(
-
-                texts=self.texts,
-
-                delta_time=self.delta_time,
-
-                custom_night_scroll=self.CUSTOM_NIGHT_SCROLL,
-
-                settings_scroll=self.SETTINGS_SCROLL,
-
-                settings_speed=self.SETTINGS_SPEED,
-
-                settings_state=self.SETTINGS_STATE
-
-            )
+            custom_night_main(self)
 
         #
         # LOAD NIGHT
         #
-
+    
         elif self.SUBGAMESTATE == "LoadNight": 
             load_night_main(self)
 

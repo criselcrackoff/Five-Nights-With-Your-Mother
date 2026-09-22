@@ -1,45 +1,59 @@
+def custom_night_main(game):
 
-def custom_night_main(
-    texts,
-    delta_time,
-    custom_night_scroll,
-    settings_scroll,
-    settings_speed,
-    settings_state,
-):
-    custom_night_scroll = max(
+    # ==========================================================
+    # CUSTOM NIGHT SCROLL
+    # ==========================================================
+
+    game.CUSTOM_NIGHT_SCROLL = max(
         -500,
-        min(custom_night_scroll, 0)
+        min(
+            game.CUSTOM_NIGHT_SCROLL,
+            0
+        )
     )
 
-    if settings_state == "opening":
+    # ==========================================================
+    # SETTINGS
+    # ==========================================================
 
-        settings_scroll += settings_speed * delta_time
+    if game.SETTINGS_STATE == "opening":
 
-        if settings_scroll >= 1050:
+        game.SETTINGS_SCROLL += (
+            game.SETTINGS_SPEED
+            *
+            game.delta_time
+        )
 
-            settings_scroll = 1050
-            settings_state = "open"
+        if game.SETTINGS_SCROLL >= 1050:
 
-            for text in texts:
+            game.SETTINGS_SCROLL = 1050
+            game.SETTINGS_STATE = "open"
+
+            for text in game.texts:
+
                 if text.get_id() == 8:
-                    text.set_trigeable(True)
 
-    elif settings_state == "closing":
+                    text.set_trigeable(
+                        True
+                    )
 
-        settings_scroll -= settings_speed * delta_time
+    elif game.SETTINGS_STATE == "closing":
 
-        if settings_scroll <= 0:
+        game.SETTINGS_SCROLL -= (
+            game.SETTINGS_SPEED
+            *
+            game.delta_time
+        )
 
-            settings_scroll = 0
-            settings_state = "closed"
+        if game.SETTINGS_SCROLL <= 0:
 
-            for text in texts:
+            game.SETTINGS_SCROLL = 0
+            game.SETTINGS_STATE = "closed"
+
+            for text in game.texts:
+
                 if text.get_id() == 7:
-                    text.set_trigeable(True)
 
-    return (
-        custom_night_scroll,
-        settings_scroll,
-        settings_state
-    )
+                    text.set_trigeable(
+                        True
+                    )
