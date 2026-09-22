@@ -692,22 +692,7 @@ class AttackScript(Script):
 
             if camera.open:
 
-                camera.close_camera()
-
-            camera.open = False
-
-            self.game.ismonitoropen = False
-
-            camera.waiting_animation = False
-
-            if self.game.monitor is not None:
-
-                self.game.monitor.set_alpha(
-                    0
-                )
-
-            camera.hide_camera_feed()
-            camera.show_office_elements()
+                camera.toggle()
 
     # ==============================================================
     # UPDATE BLACKOUT
@@ -1311,22 +1296,7 @@ class AttackScript(Script):
 
             if camera.open:
 
-                camera.close_camera()
-
-            camera.open = False
-
-            self.game.ismonitoropen = False
-
-            camera.waiting_animation = False
-
-            if self.game.monitor is not None:
-
-                self.game.monitor.set_alpha(
-                    0
-                )
-
-            camera.hide_camera_feed()
-            camera.show_office_elements()
+                camera.toggle()
 
         # ==========================================================
         # JUMPSCARE DATA
