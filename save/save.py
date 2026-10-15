@@ -7,7 +7,7 @@ SAVE_PATH = "./save/save.json"
 
 
 DEFAULT_SAVE = {
-    "version": "1.0.3.6",
+    "version": "1.0.3.7",
 
     "progress": {
         "stars": 0,
