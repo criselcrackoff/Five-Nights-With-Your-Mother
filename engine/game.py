@@ -96,6 +96,15 @@ class Game:
         )
 
         # -------------------------
+        # FPS
+        # -------------------------
+
+        self.show_fps = True
+        self.fps_font = pygame.font.SysFont("consolas", 20, bold=True)
+        self.fps_timer = 0
+        self.fps_value = 0
+
+        # -------------------------
         # Player
         # -------------------------
 
@@ -272,6 +281,46 @@ class Game:
         # -------------------------
 
         self.scripts = []
+
+    def draw_fps(self):
+        if not self.show_fps:
+            return
+
+        self.fps_timer += self.delta_time
+
+        if self.fps_timer >= 0.25:
+            self.fps_value = self.clock.get_fps()
+            self.fps_timer = 0
+
+        fps = self.fps_value
+
+        if fps >= 55:
+            color = (80, 255, 80)
+        elif fps >= 30:
+            color = (255, 220, 60)
+        else:
+            color = (255, 70, 70)
+
+        text = self.fps_font.render(
+            f"FPS: {fps:.1f}",
+            True,
+            color
+        )
+
+        rect = text.get_rect(
+            topright=(self.WIDTH - 15, 10)
+        )
+
+        background = rect.inflate(12, 8)
+
+        pygame.draw.rect(
+            self.SCREEN,
+            (0, 0, 0),
+            background,
+            border_radius=4
+        )
+
+        self.SCREEN.blit(text, rect)
 
     def drawMenu(self):
 
@@ -544,6 +593,7 @@ class Game:
             surface.set_alpha(fade.get_alpha())
 
             self.SCREEN.blit(surface,(0, 0))
+        self.draw_fps()
         pygame.display.update() 
     def drawIngame(self):
 
@@ -648,6 +698,7 @@ class Game:
             surface.set_alpha(fade.get_alpha())
 
             self.SCREEN.blit(surface,(0, 0))
+        self.draw_fps()
         pygame.display.update()        
     def create_images(self, group):
 
