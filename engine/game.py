@@ -61,8 +61,8 @@ class Game:
         self.BASE_WIDTH = 1280
         self.BASE_HEIGHT = 720
 
-        self.WIDTH = 1280
-        self.HEIGHT = 720
+        self.WIDTH = 1920
+        self.HEIGHT = 1080
 
         self.UI_SCALE = self.HEIGHT / self.BASE_HEIGHT
 
@@ -595,52 +595,76 @@ class Game:
             self.SCREEN.blit(surface,(0, 0))
         self.draw_fps()
         pygame.display.update() 
+
     def drawIngame(self):
 
-        pygame.draw.rect(
-            self.SCREEN,
-            "red",
-            self.player
-        )
+        # ==========================================================
+        # LIMPIAR PANTALLA
+        # ==========================================================
 
         self.SCREEN.fill("black")
 
-
-        #
-        # IMÁGENES
-        #
+        # ==========================================================
+        # IMAGENES
+        # ==========================================================
 
         for image in self.images:
 
             if image.get_id() == "fadein":
                 continue
 
+            # Las animaciones mantienen su progreso,
+            # incluso cuando no son visibles.
             if isinstance(image, Animation):
                 image.update(self.delta_time)
-
-            surface = image.get_scr().copy()
-            surface.set_alpha(image.get_alpha())
 
             x = int(image.get_x() * self.UI_SCALE)
             y = int(image.get_y() * self.UI_SCALE)
 
-            rect = surface.get_rect(topleft=(x, y))
+            # Mantener el rect actualizado para
+            # interacciones y deteccion del mouse.
+            source = image.get_scr()
+
+            rect = source.get_rect(
+                topleft=(x, y)
+            )
+
             image.set_rect(rect)
 
-            self.SCREEN.blit(surface, (x, y))
+            # No renderizar imagenes invisibles.
+            if image.get_alpha() <= 0:
+                continue
 
-        #
+            # Superficie cacheada con alpha aplicado.
+            surface = image.get_draw_surface()
+
+            if surface is None:
+                continue
+
+            self.SCREEN.blit(
+                surface,
+                (x, y)
+            )
+
+        # ==========================================================
         # TEXTOS
-        #
+        # ==========================================================
 
         for text in self.texts:
+
+            if text.get_alpha() <= 0:
+                continue
 
             x = int(text.get_x() * self.UI_SCALE)
             y = int(text.get_y() * self.UI_SCALE)
 
-            for line_index, surface in enumerate(text.get_rendered_lines()):
+            for line_index, surface in enumerate(
+                text.get_rendered_lines()
+            ):
 
-                surface.set_alpha(text.get_alpha())
+                surface.set_alpha(
+                    text.get_alpha()
+                )
 
                 self.SCREEN.blit(
                     surface,
@@ -650,18 +674,22 @@ class Game:
                     )
                 )
 
-        #
+        # ==========================================================
         # FADE (SIEMPRE ENCIMA)
-        #
+        # ==========================================================
 
         for image in self.images:
 
             if image.get_id() != "fadein":
                 continue
 
-            surface = image.get_scr().copy()
-            surface.set_alpha(image.get_alpha())
+            surface = image.get_draw_surface()
 
+            if surface is None:
+                continue
+
+            # Conservamos las coordenadas originales
+            # del fade, sin aplicar UI_SCALE.
             self.SCREEN.blit(
                 surface,
                 (
@@ -670,9 +698,9 @@ class Game:
                 )
             )
 
-        #
-        # DEBUG
-        #
+        # ==========================================================
+        # DEBUG: TIEMPO
+        # ==========================================================
 
         time_text = self.H4.render(
             f"Time: {round(self.elapsed_time)}s",
@@ -684,8 +712,13 @@ class Game:
             time_text,
             (10, 10)
         )
+
+        # ==========================================================
+        # RESET FADE
+        # ==========================================================
+
         for script in self.scripts:
-        
+
             if script.__class__.__name__ != "ResetScript":
                 continue
 
@@ -694,12 +727,24 @@ class Game:
             if fade is None:
                 continue
 
-            surface = fade.get_scr().copy()
-            surface.set_alpha(fade.get_alpha())
+            surface = fade.get_draw_surface()
 
-            self.SCREEN.blit(surface,(0, 0))
+            if surface is None:
+                continue
+
+            self.SCREEN.blit(
+                surface,
+                (0, 0)
+            )
+
+        # ==========================================================
+        # FPS
+        # ==========================================================
+
         self.draw_fps()
-        pygame.display.update()        
+
+        pygame.display.update()
+    
     def create_images(self, group):
 
         images = []

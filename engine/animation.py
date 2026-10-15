@@ -210,12 +210,9 @@ class Animation(Images):
         if not self.frames:
             return
 
-        # Images almacena su superficie en el atributo
-        # privado __scr. Lo actualizamos directamente
-        # para no llamar a scale_surface().
-        self._Images__scr = self.frames[
-            self.current_frame
-        ]
+        self.set_scr(
+            self.frames[self.current_frame]
+        )
 
     # ==========================================================
     # UPDATE
