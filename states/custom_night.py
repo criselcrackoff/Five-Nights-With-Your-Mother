@@ -37,6 +37,19 @@ def custom_night_main(game):
                 str(animatronic.get_ai())
             )
 
+    for text in game.texts:
+        if text.get_id() == 14:
+
+            match game.night_type:
+                case 1:
+                    text.set_text(f"Night: Normal")
+                case 2:
+                    text.set_text(f"Night: Extended")
+                case 3:
+                    text.set_text(f"Night: XL")
+                case 4:
+                    text.set_text(f"Night: XXL")
+
     # ======================================================
     # SETTINGS
     # ======================================================
@@ -158,6 +171,21 @@ def custom_night_handle_click(game):
 
                 game.SETTINGS_STATE = "closing"
 
+            case 10:
+                game.hour = 0
+                game.night_type = 1
+
+            case 11:
+                game.hour = 0
+                game.night_type = 2
+
+            case 12:
+                game.hour = -2
+                game.night_type = 3
+
+            case 13:
+                game.hour = -4
+                game.night_type = 4
     # ======================================================
     # IMAGE BUTTONS
     # ======================================================
