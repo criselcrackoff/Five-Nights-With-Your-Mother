@@ -774,7 +774,7 @@ class ResetScript(Script):
         # 10. NOCHE
         # =====================================================
 
-        game.hour = -4
+        game.hour = 0
 
         game.night_type = 1
 
