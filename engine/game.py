@@ -16,7 +16,7 @@ from engine.animatronic import Animatronic
 from engine.mixer import MixerMusic
 
 from states.warning_screen import warning_main
-from states.custom_night import custom_night_main
+from states.custom_night import (custom_night_main,custom_night_handle_event,custom_night_handle_click)
 from states.load_night import load_night_main
 from states.ingame import ingame_main
 from states.gameover import gameover_main
@@ -1088,32 +1088,8 @@ class Game:
             # Scroll
             #
 
-            if (
-                event.type == pygame.MOUSEWHEEL
-                and self.SUBGAMESTATE == "CustomNight"
-            ):
-
-                self.CUSTOM_NIGHT_SCROLL += event.y * 25
-
-            #
-            # Actualizar textos
-            #
-
-            for text in self.texts:
-                
-                match text.get_id():
-                    case 111:
-                        text.set_text(
-                            str(self.maurello.get_ai())
-                        )
-                    case 112:
-                        text.set_text(
-                            str(self.furry.get_ai())
-                        )
-                    case 113:
-                        text.set_text(
-                            str(self.teddy.get_ai())
-                        )                        
+            if self.SUBGAMESTATE == "CustomNight":
+                custom_night_handle_event(self, event)            
 
             #
             # Click izquierdo
@@ -1145,124 +1121,8 @@ class Game:
 
     def handle_menu_click(self):
 
-        for text in self.texts:
-
-            if not text.is_trigeable():
-                continue
-
-            rect = text.get_rect()
-
-            if rect and rect.collidepoint(self.mouse_x, self.mouse_y):
-
-                match text.get_id():
-
-                    case 1:
-                        self.maurello.set_ai(0)
-                        self.furry.set_ai(0)
-                        self.teddy.set_ai(0)
-
-                    case 2:
-                        self.maurello.add_ai(1)
-                        self.furry.add_ai(1)
-                        self.teddy.add_ai(1)
-
-                    case 3:
-                        self.maurello.set_ai(5)
-                        self.furry.set_ai(5)
-                        self.teddy.set_ai(5)
-
-                    case 4:
-                        self.maurello.set_ai(10)
-                        self.furry.set_ai(10)
-                        self.teddy.set_ai(10)
-
-                    case 5:
-                        self.maurello.set_ai(20)
-                        self.furry.set_ai(20)
-                        self.teddy.set_ai(20)
-
-                    case 6:
-
-                        print("Start Game")
-
-                        self.menu_start_time = time.time()
-
-                        self.mixer.set_volume(
-                            self.CHANNEL_MENU,
-                            0.05
-                        )
-
-                        self.texts = self.LOAD_NIGHT_TEXTS
-                        self.images = self.LOAD_NIGHT_IMG
-
-                        self.discord.update_rpc(
-                            "Loading night",
-                            "In a Menu"
-                        )
-
-                        self.SUBGAMESTATE = "LoadNight"
-
-                    case 7:
-
-                        self.mixer.set_volume(
-                            self.CHANNEL_MENU,
-                            0.05
-                        )
-
-                        text.set_trigeable(False)
-
-                        self.SETTINGS_STATE = "opening"
-
-                    case 8:
-
-                        self.mixer.set_volume(
-                            self.CHANNEL_MENU,
-                            0.1
-                        )
-
-                        text.set_trigeable(False)
-
-                        self.SETTINGS_STATE = "closing"
-
-        #
-        # Botones de imágenes
-        #
-
-        for image in self.images:
-
-            if not image.is_trigeable():
-                continue
-
-            rect = image.get_rect()
-
-            if not rect:
-                continue
-
-            if not rect.collidepoint(
-                self.mouse_x,
-                self.mouse_y
-            ):
-                continue
-
-            match image.get_subid():
-
-                case "MaurelloMinusAi":
-                    self.maurello.minus_ai(1)
-
-                case "MaurelloAddAi":
-                    self.maurello.add_ai(1)
-
-                case "FurryMinusAi":
-                    self.furry.minus_ai(1)
-
-                case "FurryAddAi":
-                    self.furry.add_ai(1)
-
-                case "TeddyMinusAi":
-                    self.teddy.minus_ai(1)
-
-                case "TeddyAddAi":
-                    self.teddy.add_ai(1)                
+        if self.SUBGAMESTATE == "CustomNight":
+            custom_night_handle_click(self)           
 
     def handle_ingame_click(self):
 
@@ -1348,6 +1208,7 @@ class Game:
             load_night_main(self)
 
         elif self.SUBGAMESTATE == "GameOver": 
+            self.menu_start_time = time.time()
             self.add_script(ResetScript)
             gameover_main(self)
 
