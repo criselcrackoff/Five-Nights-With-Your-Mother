@@ -1542,8 +1542,8 @@ class AttackScript(Script):
 
         self.game.scripts = []
 
-        self.game.SUBGAMESTATE = "GameOver"
         self.game.GAMESTATE = "menu"
+        self.game.SUBGAMESTATE = "GameOver"
 
         self.jumpscare_active = False
         self.jumpscare_animatronic = None
