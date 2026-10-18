@@ -20,6 +20,7 @@ from states.custom_night import (custom_night_main,custom_night_handle_event,cus
 from states.load_night import load_night_main
 from states.ingame import ingame_main
 from states.gameover import gameover_main
+from states.nightcompleted import night_completed_main
 
 from scripts.power import PowerScript
 from scripts.cameras import CameraScript
@@ -61,13 +62,14 @@ class Game:
         self.BASE_WIDTH = 1280
         self.BASE_HEIGHT = 720
 
-        self.WIDTH = 1920
-        self.HEIGHT = 1080
+        self.WIDTH = 1280
+        self.HEIGHT = 720
 
         self.UI_SCALE = self.HEIGHT / self.BASE_HEIGHT
 
-        print(f"Image Scale: {self.UI_SCALE}")
+        Text.set_ui_scale(self.UI_SCALE)
 
+        print(f"Image Scale: {self.UI_SCALE}")
         # -------------------------
         # Version
         # -------------------------
@@ -133,58 +135,16 @@ class Game:
         # Fonts
         # -------------------------
 
-        self.FONT_PATH = "./assets/fonts/OCRAEXT.TTF"
+        self.FONT_SIZE = [50, 40, 35, 30, 25, 20, 15, 10]
 
-        self.FONT_SIZE = [
-            50,
-            40,
-            35,
-            30,
-            25,
-            20,
-            15,
-            10
-        ]
-
-        self.CLOCK = pygame.font.Font(
-            self.FONT_PATH,
-            int(self.FONT_SIZE[0] * self.UI_SCALE)
-        )
-
-        self.H1 = pygame.font.Font(
-            self.FONT_PATH,
-            int(self.FONT_SIZE[1] * self.UI_SCALE)
-        )
-
-        self.H2 = pygame.font.Font(
-            self.FONT_PATH,
-            int(self.FONT_SIZE[2] * self.UI_SCALE)
-        )
-
-        self.H3 = pygame.font.Font(
-            self.FONT_PATH,
-            int(self.FONT_SIZE[3] * self.UI_SCALE)
-        )
-
-        self.H4 = pygame.font.Font(
-            self.FONT_PATH,
-            int(self.FONT_SIZE[4] * self.UI_SCALE)
-        )
-
-        self.H5 = pygame.font.Font(
-            self.FONT_PATH,
-            int(self.FONT_SIZE[5] * self.UI_SCALE)
-        )
-
-        self.H6 = pygame.font.Font(
-            self.FONT_PATH,
-            int(self.FONT_SIZE[7] * self.UI_SCALE)
-        )
-
-        self.P = pygame.font.Font(
-            self.FONT_PATH,
-            int(self.FONT_SIZE[6] * self.UI_SCALE)
-        )
+        self.CLOCK = self.FONT_SIZE[0]
+        self.H1 = self.FONT_SIZE[1]
+        self.H2 = self.FONT_SIZE[2]
+        self.H3 = self.FONT_SIZE[3]
+        self.H4 = self.FONT_SIZE[4]
+        self.H5 = self.FONT_SIZE[5]
+        self.H6 = self.FONT_SIZE[7]
+        self.P = self.FONT_SIZE[6]
 
         # -------------------------
         # Clock
@@ -257,6 +217,7 @@ class Game:
 
         self.hour = 0
         self.night_type = 1
+        self.NIGHT_FINISHING = False
         self.officetype = "Compact"
 
         self.LEFT_DOOR = "Open"
@@ -372,7 +333,7 @@ class Game:
             if text.get_subid() != "layered":
                 continue
 
-            surface = text.get_size().render(
+            surface = text.get_font_object().render(
                 text.get_text(),
                 True,
                 text.get_color()
@@ -424,7 +385,7 @@ class Game:
             if text.get_subid() != "2ndlayered":
                 continue
 
-            surface = text.get_size().render(
+            surface = text.get_font_object().render(
                 text.get_text(),
                 True,
                 text.get_color()
@@ -478,7 +439,7 @@ class Game:
             if text.get_subid() != "Config":
                 continue
 
-            surface = text.get_size().render(
+            surface = text.get_font_object().render(
                 text.get_text(),
                 True,
                 text.get_color()
@@ -564,14 +525,15 @@ class Game:
         #
         # DEBUG
         #
+        font = Text.get_cached_font(self.H4, "consolas")
 
-        time_text = self.H4.render(
+        time_text = font.render(
             f"Time: {round(self.elapsed_time)}s",
             True,
             "white"
         )
 
-        menu_text = self.H4.render(
+        menu_text = font.render(
             f"Menu: {round(self.menu_elapsed_time)}s",
             True,
             "white"
@@ -702,7 +664,9 @@ class Game:
         # DEBUG: TIEMPO
         # ==========================================================
 
-        time_text = self.H4.render(
+        font = Text.get_cached_font(self.H4, "consolas")
+        
+        time_text = font.render(
             f"Time: {round(self.elapsed_time)}s",
             True,
             "white"
@@ -1035,6 +999,10 @@ class Game:
             Text(0,"Game Over", self.H1, "white", 255, False, 20, 660)
         ]
 
+        self.NIGHTCOMPLETED_TEXTS = [
+            Text(0,"0", self.H1, "white", 255, False, 20, 660)
+        ]
+
         #
         # Images
         #
@@ -1059,6 +1027,10 @@ class Game:
             "GAMEOVER"
         )
 
+        self.NIGHTCOMPLETED_IMG = self.create_images(
+            "NIGHTCOMPLETED"
+        )
+        
         #
         # Default screen
         #
@@ -1217,6 +1189,12 @@ class Game:
             self.menu_start_time = time.time()
             self.add_script(ResetScript)
             gameover_main(self)
+
+        elif self.SUBGAMESTATE == "NightCompleted": 
+            self.add_script(ResetScript)
+            
+            self.menu_start_time = time.time()
+            night_completed_main(self)
 
     def update_ingame(self):
         ingame_main(self)

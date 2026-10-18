@@ -819,5 +819,32 @@ IMAGES = {
             "fullscreen": True,
             "subid": None
         }
+    ],
+
+    "NIGHTCOMPLETED": [
+        {
+            "type":"image",
+            "id": "bar_thingy",
+            "path": "./assets/sprites/UCN6AM/3stupendous_bar.png",
+            "alpha": 255,
+            "x": -1280,
+            "y": 0,
+            "trigger": False,
+            "fullscreen": False,
+            "subid": None,
+            "size":(2560,167)
+        },
+        {
+            "type":"image",
+            "id": "wording",
+            "path": "./assets/sprites/UCN6AM/3stupendous.png",
+            "alpha": 255,
+            "x": 0,
+            "y": 0,
+            "trigger": False,
+            "fullscreen": False,
+            "subid": None,
+            "size":(1280,167)
+        }
     ]
 }
