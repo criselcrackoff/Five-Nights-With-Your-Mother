@@ -704,6 +704,8 @@ class ResetScript(Script):
         game.CUSTOM_NIGHT_IMG = None
         game.LOAD_NIGHT_IMG = None
         game.INGAME_IMG = None
+        game.GAMEOVER_IMG = None
+        game.NIGHTCOMPLETED_IMG = None
 
         game.WARNING_IMG = game.create_images(
             "WARNING"
@@ -719,6 +721,14 @@ class ResetScript(Script):
 
         game.INGAME_IMG = game.create_images(
             "INGAME_COMPACTOFFICE"
+        )
+
+        game.GAMEOVER_IMG = self.create_images(
+            "GAMEOVER"
+        )
+
+        game.NIGHTCOMPLETED_IMG = self.create_images(
+            "NIGHTCOMPLETED"
         )
 
         # =====================================================
@@ -779,6 +789,8 @@ class ResetScript(Script):
         game.night_type = 1
 
         game.officetype = "Compact"
+
+        self.NIGHT_FINISHING = False
 
         game.LEFT_DOOR = "Open"
 
