@@ -1,5 +1,57 @@
-from engine.richpresense import RichPresense
-from scripts.reset import ResetScript
+from data.sounds import *
+
+
+def update_hour_text(game):
+    hour = game.hour
+
+    if hour < 0:
+        displayed_hour = (hour + 12) % 12
+        period = "PM"
+    else:
+        displayed_hour = hour % 12
+        period = "AM"
+
+    if displayed_hour == 0:
+        displayed_hour = 12
+
+    for text in game.texts:
+
+        if text.get_subid() == "Hour":
+            text.set_text(str(displayed_hour))
+            text.set_x(1150 if displayed_hour >= 10 else 1170)
+
+        elif text.get_subid() == "Period":
+            text.set_text(period)
+
+
+def finish_night(game):
+
+    game.NIGHT_FINISHING = True
+    game.INGAME_FADE_SPEED = 125
+    if game.INGAME_FADE_ALPHA >= 1 and game.INGAME_FADE_ALPHA <= 5:
+        game.timer = 0
+        game.mixer.stop_all()                                                       
+        game.mixer.play(Night_Completed_Funfair,volume=0.3,channel=game.CHANNEL_SFX)
+    game.INGAME_FADE_ALPHA = min(
+        255,
+        game.INGAME_FADE_ALPHA +
+        game.INGAME_FADE_SPEED * game.delta_time
+    )
+    
+    for image in game.images:
+        if image.get_id() == "fadein":
+            image.set_alpha(int(game.INGAME_FADE_ALPHA))
+
+    if game.INGAME_FADE_ALPHA >= 255:
+
+        game.texts = []
+        game.images = []
+        game.scripts = []
+        game.images = game.NIGHTCOMPLETED_IMG
+        game.texts = game.NIGHTCOMPLETED_TEXTS
+        game.GAMESTATE = "menu"
+        game.SUBGAMESTATE = "NightCompleted"
+
 
 def ingame_main(game):
 
@@ -8,88 +60,55 @@ def ingame_main(game):
         details="In a Night"
     )
 
-    game.night_timer += game.delta_time
+    # ==========================================================
+    # COMPLETAR NOCHE
+    # ==========================================================
+
+    end_hour = 6 if game.night_type == 1 else 8
+
+    if game.hour >= end_hour:
+        game.NIGHT_FINISHING = True
+
+    if game.NIGHT_FINISHING:
+        finish_night(game)
+        return
 
     # ==========================================================
     # HORA
     # ==========================================================
 
-    if 0 <= game.night_timer <= 1:
+    if game.night_timer == 0:
+        update_hour_text(game)
 
-        for text in game.texts:
-
-            if game.hour == -4:
-
-                if text.get_subid() == "Period":
-                    text.set_text("PM")
-
-                if text.get_subid() == "Hour":
-                    text.set_text("8")
-                    text.set_x(1170)
-
-            elif game.hour == -2:
-
-                if text.get_subid() == "Period":
-                    text.set_text("PM")
-
-                if text.get_subid() == "Hour":
-                    text.set_text("10")
-                    text.set_x(1150)
-
-            elif game.hour == 0:
-
-                if text.get_subid() == "Period":
-                    text.set_text("AM")
-
-                if text.get_subid() == "Hour":
-                    text.set_text("12")
-
-            elif game.hour == 1:
-
-                if text.get_subid() == "Hour":
-                    text.set_text("1")
-                    text.set_x(1170)
+    game.night_timer += game.delta_time
 
     # ==========================================================
     # AVANZAR HORA
     # ==========================================================
 
-    if game.night_timer > 75:
+    if game.night_timer >= 1:
 
         game.hour += 1
-        match game.hour:
-            case 0:
-                game.texts[0].set_text("12")
-            case 1:
-                game.texts[0].set_text("1")
-            case _:
-                game.texts[0].set_text(
-                    str(int(game.texts[0].get_text()) + 1)
-                )
+        game.night_timer -= 2
 
-        game.night_timer = 0
+        update_hour_text(game)
 
     # ==========================================================
     # FADE IN
     # ==========================================================
 
-    if game.INGAME_FADE_ALPHA > 0:
+    if game.INGAME_FADE_ALPHA > 0 and not game.NIGHT_FINISHING:
 
-        game.INGAME_FADE_ALPHA -= (
-            game.INGAME_FADE_SPEED *
-            game.delta_time
+        game.INGAME_FADE_ALPHA = max(
+            0,
+            game.INGAME_FADE_ALPHA -
+            game.INGAME_FADE_SPEED * game.delta_time
         )
-
-        if game.INGAME_FADE_ALPHA < 0:
-            game.INGAME_FADE_ALPHA = 0
 
         for image in game.images:
 
             if image.get_id() == "fadein":
-
-                image.set_alpha(
-                    game.INGAME_FADE_ALPHA
-                )
+                image.set_alpha(game.INGAME_FADE_ALPHA)
 
     # ==========================================================
     # MOVIMIENTO DEL JUGADOR
@@ -141,15 +160,4 @@ def ingame_main(game):
         )
     )
 
-    game.player.x = int(
-        game.player_x
-    )
-
-    # ==========================================================
-    # Completar Noche
-    # ==========================================================
-
-    match game.night_type:
-        case 1:
-            if game.hour == 6:
-                pass
+    game.player.x = int(game.player_x)
