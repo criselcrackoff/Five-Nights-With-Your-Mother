@@ -39,7 +39,7 @@ class ResetScript(Script):
         # =====================================================
 
         # Reset normal
-        self.normal_fade_duration = 1.5
+        self.normal_fade_duration = 0.75
 
         # Reset de noche
         # Mucho más rápido.
@@ -723,11 +723,11 @@ class ResetScript(Script):
             "INGAME_COMPACTOFFICE"
         )
 
-        game.GAMEOVER_IMG = self.create_images(
+        game.GAMEOVER_IMG = game.create_images(
             "GAMEOVER"
         )
 
-        game.NIGHTCOMPLETED_IMG = self.create_images(
+        game.NIGHTCOMPLETED_IMG = game.create_images(
             "NIGHTCOMPLETED"
         )
 
@@ -743,6 +743,8 @@ class ResetScript(Script):
         game.SUBGAMESTATE = "warningscreen"
 
         game.MENUSTATE = "fade_in"
+
+        game.NIGHT_FINISHING = False
 
         # =====================================================
         # 7. TIMERS

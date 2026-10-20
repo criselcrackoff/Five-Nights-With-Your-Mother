@@ -30,6 +30,7 @@ def finish_night(game):
     game.INGAME_FADE_SPEED = 125
     if game.INGAME_FADE_ALPHA >= 1 and game.INGAME_FADE_ALPHA <= 5:
         game.timer = 0
+        game.scripts = []
         game.mixer.stop_all()                                                       
         game.mixer.play(Night_Completed_Funfair,volume=0.3,channel=game.CHANNEL_SFX)
     game.INGAME_FADE_ALPHA = min(
@@ -46,7 +47,6 @@ def finish_night(game):
 
         game.texts = []
         game.images = []
-        game.scripts = []
         game.images = game.NIGHTCOMPLETED_IMG
         game.texts = game.NIGHTCOMPLETED_TEXTS
         game.GAMESTATE = "menu"
